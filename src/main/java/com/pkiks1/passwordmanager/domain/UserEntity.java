@@ -15,7 +15,7 @@ public class UserEntity {
     private String id;
     private String login;
     private char[] password;
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private final List<CredentialEntity> credentials = new ArrayList<>();
 
     protected UserEntity() {}

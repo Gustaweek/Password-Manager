@@ -5,6 +5,7 @@ import com.pkiks1.passwordmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.CredentialException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +28,23 @@ public class UserService {
         return false;
     }
 
-    public void createUser(String login, char[] password) {
+    private void createUser(String login, char[] password) {
         userRepository.save(new UserEntity(login, password));
     }
 
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
+    public boolean registerUser(String login, char[] firstPassword, char[] secondPassword) throws CredentialException {
+        if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
+        || (login.length() < 5 || login.length() > 20)
+        || (firstPassword.length < 5 || firstPassword.length > 20)) {
+            throw new CredentialException("Incorrect data");
+        }
+
+        Optional<UserEntity> userEntityOptional = userRepository.findUserEntityByLogin(login);
+        if (userEntityOptional.isEmpty()) {
+            createUser(login, firstPassword);
+            return true;
+        }
+
+        return false;
     }
 }

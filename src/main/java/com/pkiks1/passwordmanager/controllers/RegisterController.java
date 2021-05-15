@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.security.auth.login.CredentialException;
 
 @Controller
 @RequestMapping("register")
@@ -25,7 +28,23 @@ public class RegisterController {
     }
 
     @PostMapping
-    public String registerUser(Model model) {
-        return "index";
+    public String registerUser(@RequestParam(name = "login") String login,
+                               @RequestParam(name = "firstPassword") char[] firstPassword,
+                               @RequestParam(name = "secondPassword") char[] secondPassword,
+                               Model model) {
+
+        try {
+            if (userService.registerUser(login, firstPassword, secondPassword)) {
+                return "homepage";
+            }
+        } catch (CredentialException e) {
+            model.addAttribute("incorrectData", true);
+            return "register";
+        } finally {
+            model.addAttribute("login", login);
+        }
+
+        model.addAttribute("loginExistsError", true);
+        return "register";
     }
 }

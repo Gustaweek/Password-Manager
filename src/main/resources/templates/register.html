@@ -5,7 +5,6 @@
     <title>Rejestracja</title>
     <link th:href="@{/styles/style.css}" rel="stylesheet">
     <link th:href="@{/styles/jquery-ui.min.css}" rel="stylesheet">
-    <script th:src="@{/scripts/register.js}"></script>
     <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
     <script th:src="@{/scripts/jquery-ui.min.js}"></script>
 </head>
@@ -14,29 +13,36 @@
     <form th:action="@{/register}" method="post">
         <div>
             <label><p>Podaj login</p>
-                <input type="text" name="login">
+                <input type="text" name="login" minlength="5" maxlength="20" required th:value="${login}">
             </label>
         </div>
         <div>
             <label><p>Podaj hasło</p>
-                <input type="password" name="firstPassword">
+                <input type="password" name="firstPassword" id="firstPassword" minlength="5" maxlength="20" required>
             </label>
         </div>
         <div>
             <label><p>Powtórz hasło</p>
-                <input type="password" name="secondPassword">
+                <input type="password" name="secondPassword" id="secondPassword" minlength="5" maxlength="20" required>
             </label>
         </div>
         <div>
             <label>
-                <input type="checkbox">
+                <input type="checkbox" required>
                 Akceptuję <a href="#" onclick="showUserAgreementModal()">regulamin korzystania z serwisu</a>.
 <!--                TODO-->
             </label>
         </div>
 <!--        TODO recaptcha-->
+        <div th:if="${loginExistsError} or ${incorrectData}">
+            <p th:if="${loginExistsError}" th:class="error">Podany login już istnieje, wybierz inny</p>
+            <p th:if="${incorrectData}" th:class="error">Podane dane są niepoprawne</p>
+        </div>
         <div>
             <input type="submit" value="Zarejestruj">
+        </div>
+        <div>
+            <p>Jeżeli jesteś już zarejestrowany, <a th:href="@{/login}">zaloguj się</a>.</p>
         </div>
     </form>
 </div>
@@ -60,4 +66,5 @@
     </p>
 </div>
 </body>
+<script th:src="@{/scripts/register.js}"></script>
 </html>

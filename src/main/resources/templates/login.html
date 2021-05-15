@@ -10,12 +10,12 @@
     <form th:action="@{/login}" method="post">
         <div>
             <label><p>Login</p>
-                <input type="text" name="login" placeholder="login">
+                <input type="text" name="login" placeholder="login" required>
             </label>
         </div>
         <div>
             <label><p>Hasło</p>
-                <input type="password" name="password" placeholder="hasło">
+                <input type="password" name="password" placeholder="hasło" required>
             </label>
         </div>
         <div th:if="${loginFailed}">
@@ -23,6 +23,9 @@
         </div>
         <div>
             <input type="submit" value="Zaloguj">
+        </div>
+        <div>
+            <p>Nie masz konta, <a th:href="@{/register}">zarejestruj się</a>.</p>
         </div>
     </form>
 </div>

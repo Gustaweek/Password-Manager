@@ -7,15 +7,19 @@
 </head>
 <body>
 <div class="loginContainer">
-    <form action="/login" method="post">
+    <form th:action="@{/login}" method="post">
         <div>
-            <input type="text" name="login" placeholder="login">
+            <label><p>Login</p>
+                <input type="text" name="login" placeholder="login">
+            </label>
         </div>
         <div>
-            <input type="password" name="password" placeholder="hasło">
+            <label><p>Hasło</p>
+                <input type="password" name="password" placeholder="hasło">
+            </label>
         </div>
-        <div>
-            <p th:class="error" th:if="${loginFailed}">Wprowadzono błędny login lub hasło</p>
+        <div th:if="${loginFailed}">
+            <p th:class="error">Wprowadzono błędny login lub hasło</p>
         </div>
         <div>
             <input type="submit" value="Zaloguj">

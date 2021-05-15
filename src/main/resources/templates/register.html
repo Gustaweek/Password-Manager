@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+    <link th:href="@{/styles/style.css}" rel="stylesheet">
+    <link th:href="@{/styles/jquery-ui.min.css}" rel="stylesheet">
+    <script th:src="@{/scripts/register.js}"></script>
+    <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/scripts/jquery-ui.min.js}"></script>
+</head>
+<body>
+<div>
+    <form th:action="@{/register}" method="post">
+        <div>
+            <label><p>Podaj login</p>
+                <input type="text" name="login">
+            </label>
+        </div>
+        <div>
+            <label><p>Podaj hasło</p>
+                <input type="password" name="firstPassword">
+            </label>
+        </div>
+        <div>
+            <label><p>Powtórz hasło</p>
+                <input type="password" name="secondPassword">
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox">
+                Akceptuję <a href="#" onclick="showUserAgreementModal()">regulamin korzystania z serwisu</a>.
+<!--                TODO-->
+            </label>
+        </div>
+<!--        TODO recaptcha-->
+        <div>
+            <input type="submit" value="Zarejestruj">
+        </div>
+    </form>
+</div>
+
+<!--TODO-->
+<div id="userAgreement">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus commodo odio, eu mattis risus dapibus non. Praesent lacinia auctor elit, nec auctor mi facilisis eget. Donec ullamcorper, odio dignissim varius dignissim, est odio imperdiet mauris, consequat condimentum nisi arcu dapibus arcu. Donec enim nibh, dignissim ac sapien et, cursus porttitor enim. Morbi non urna dui. Ut vitae lorem nulla. Proin rutrum eleifend justo id scelerisque. Nulla vel nibh quis turpis cursus dapibus eget quis erat. Etiam posuere pellentesque lorem, eget convallis ex condimentum ac. Quisque non augue quis mi imperdiet commodo in sed purus. Vivamus placerat id libero non imperdiet.
+    </p>
+    <p>
+        Sed eu enim suscipit nibh malesuada pulvinar. Praesent convallis arcu eu semper auctor. Sed dui nibh, pellentesque at nulla eu, viverra blandit mauris. Mauris mi neque, blandit et molestie at, tempor id tortor. Praesent varius dapibus tortor et hendrerit. Mauris maximus accumsan elementum. Maecenas non felis nec diam hendrerit pharetra. Suspendisse eleifend ligula sit amet neque accumsan, sed mollis velit semper. Sed auctor ante eget augue vehicula, at ultrices lorem semper. Donec eros ligula, lobortis ac condimentum ut, maximus eu ex. Vivamus in dui quis neque condimentum rhoncus.
+    </p>
+    <p>
+        Phasellus vulputate ante ac nunc facilisis, pellentesque lobortis turpis consequat. Curabitur condimentum varius quam, vel sollicitudin purus auctor et. In consequat eros ac lorem dignissim, vel ornare justo iaculis. Ut quis odio arcu. Cras et enim venenatis neque lobortis tempor et nec nulla. Integer placerat porta erat, sed sagittis massa pellentesque ac. Mauris turpis dui, maximus nec nisl faucibus, mattis sodales ante. Aliquam rutrum tempor purus, ac elementum turpis dictum ut. Cras molestie, erat id imperdiet aliquet, erat metus porttitor sapien, at feugiat purus sem a tortor. Sed vulputate enim orci, in accumsan ante dignissim sed. Mauris consequat sed nisl ac euismod.
+    </p>
+    <p>
+        Proin bibendum mattis neque, ut egestas orci euismod sit amet. Aenean tempor nibh nec lectus sollicitudin elementum. Suspendisse aliquet, justo vitae fringilla vulputate, velit lorem vestibulum nulla, sit amet ultrices sapien nulla vel lorem. Vivamus ultrices ligula quis mauris bibendum, in consequat felis vestibulum. Nulla ullamcorper vestibulum quam, hendrerit suscipit odio ullamcorper nec. Fusce eu nisi nibh. Vivamus sed dapibus purus, suscipit condimentum dui. In accumsan elit non mi tincidunt vestibulum. Morbi mollis viverra elit, vitae gravida justo vestibulum non. Aenean scelerisque, ligula id rhoncus rhoncus, augue leo finibus nunc, id euismod urna urna cursus tellus. Aliquam ut turpis consequat, sagittis mi nec, convallis mi. Nullam suscipit, felis ac rutrum dapibus, massa erat blandit sem, et tincidunt lectus nulla id nisi. Morbi vulputate condimentum ipsum, id pellentesque lectus lobortis ac. Fusce dapibus finibus pharetra. In ut accumsan magna, nec dignissim est.
+    </p>
+    <p>
+        Aliquam ac nibh varius, posuere nunc quis, pulvinar mauris. Nulla cursus enim quis placerat molestie. Nunc consectetur mi rutrum, consequat enim sed, interdum ligula. Fusce faucibus tempus turpis id placerat. Sed consequat quis dolor non gravida. Sed quis enim sed nibh aliquam convallis pellentesque ac turpis. Mauris posuere facilisis metus, id vulputate turpis lobortis sit amet. Aenean vulputate nisl sit amet volutpat ullamcorper. Aliquam porttitor arcu at purus efficitur auctor. Aenean vel tincidunt neque. Suspendisse et sollicitudin felis. Duis sed velit malesuada, accumsan sapien in, ornare est. Nullam ullamcorper faucibus metus, et vulputate libero ornare non. Sed dictum eros nec ornare malesuada. Nam id ligula placerat nisi sagittis condimentum sed a massa. Sed volutpat ligula ac porta faucibus.
+    </p>
+</div>
+</body>
+</html>

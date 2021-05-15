@@ -9,5 +9,5 @@ public class IndexController {
     @GetMapping({"", "/", "index", "index.html"})
     public String index(Model model) {
         return "index";
-    }
+    } //TODO
 }

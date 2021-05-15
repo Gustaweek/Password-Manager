@@ -6,3 +6,19 @@ body {
 .error {
     color: red;
 }
+
+label>p {
+    margin-bottom: 0;
+}
+
+input[type=submit], input[type=checkbox] {
+    margin-top: 10px;
+}
+
+a {
+    color: lightskyblue;
+}
+
+#userAgreement {
+    display: none;
+}

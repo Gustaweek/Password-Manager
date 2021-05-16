@@ -30,10 +30,8 @@
             <label>
                 <input type="checkbox" required>
                 Akceptuję <a href="#" onclick="showUserAgreementModal()">regulamin korzystania z serwisu</a>.
-<!--                TODO-->
             </label>
         </div>
-<!--        TODO recaptcha-->
         <div th:if="${loginExistsError} or ${incorrectData}">
             <p th:if="${loginExistsError}" th:class="error">Podany login już istnieje, wybierz inny</p>
             <p th:if="${incorrectData}" th:class="error">Podane dane są niepoprawne</p>
@@ -47,7 +45,6 @@
     </form>
 </div>
 
-<!--TODO-->
 <div id="userAgreement">
     <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus commodo odio, eu mattis risus dapibus non. Praesent lacinia auctor elit, nec auctor mi facilisis eget. Donec ullamcorper, odio dignissim varius dignissim, est odio imperdiet mauris, consequat condimentum nisi arcu dapibus arcu. Donec enim nibh, dignissim ac sapien et, cursus porttitor enim. Morbi non urna dui. Ut vitae lorem nulla. Proin rutrum eleifend justo id scelerisque. Nulla vel nibh quis turpis cursus dapibus eget quis erat. Etiam posuere pellentesque lorem, eget convallis ex condimentum ac. Quisque non augue quis mi imperdiet commodo in sed purus. Vivamus placerat id libero non imperdiet.

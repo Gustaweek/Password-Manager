@@ -29,7 +29,7 @@ public class LoginController {
     public String logIn(@RequestParam(name = "login") String login, @RequestParam(name = "password") char[] password, Model model) {
         if (userService.isCredentialsCorrect(login, password)) {
             model.addAttribute("login", login);
-            return "homepage";
+            return "dashboard";
         }
         model.addAttribute("loginFailed", true);
         return getLoginPage(model);

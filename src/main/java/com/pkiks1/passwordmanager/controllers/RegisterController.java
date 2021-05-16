@@ -35,7 +35,7 @@ public class RegisterController {
 
         try {
             if (userService.registerUser(login, firstPassword, secondPassword)) {
-                return "homepage";
+                return "dashboard";
             }
         } catch (CredentialException e) {
             model.addAttribute("incorrectData", true);

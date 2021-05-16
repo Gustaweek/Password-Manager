@@ -4,18 +4,24 @@ import java.util.Objects;
 
 public final class CredentialDto {
 
-    private String title;
-    private String email;
-    private char[] password;
+    private final String userId;
+    private final String title;
+    private final String email;
+    private final char[] password;
 
-    private CredentialDto(String title, String email, char[] password) {
+    private CredentialDto(String userId, String title, String email, char[] password) {
+        this.userId = userId;
         this.title = title;
         this.email = email;
         this.password = password;
     }
 
-    public static CredentialDto create(String title, String email, char[] password) {
-        return new CredentialDto(title, email, password);
+    public static CredentialDto create(String userId, String title, String email, char[] password) {
+        return new CredentialDto(userId, title, email, password);
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getTitle() {
@@ -34,19 +40,22 @@ public final class CredentialDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         CredentialDto that = (CredentialDto) o;
-        return title.equals(that.title) && email.equals(that.email);
+
+        return userId.equals(that.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, email);
+        return userId.hashCode();
     }
 
     @Override
     public String toString() {
         return "CredentialDto{" +
-                "title='" + title + '\'' +
+                "userId='" + userId + '\'' +
+                ", title='" + title + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

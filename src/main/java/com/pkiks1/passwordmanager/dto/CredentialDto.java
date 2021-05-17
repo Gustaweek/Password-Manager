@@ -4,20 +4,30 @@ import java.util.Objects;
 
 public final class CredentialDto {
 
+    private final String id;
     private final String userId;
     private final String title;
     private final String email;
     private final char[] password;
 
-    private CredentialDto(String userId, String title, String email, char[] password) {
+    private CredentialDto(String id, String userId, String title, String email, char[] password) {
+        this.id = id;
         this.userId = userId;
         this.title = title;
         this.email = email;
         this.password = password;
     }
 
-    public static CredentialDto create(String userId, String title, String email, char[] password) {
-        return new CredentialDto(userId, title, email, password);
+    public static CredentialDto createNewCredentialDto(String userId, String title, String email, char[] password) {
+        return new CredentialDto("", userId, title, email, password);
+    }
+
+    public static CredentialDto createExistingCredentialDto(String id, String userId, String title, String email, char[] password) {
+        return new CredentialDto(id, userId, title, email, password);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getUserId() {
@@ -40,21 +50,20 @@ public final class CredentialDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         CredentialDto that = (CredentialDto) o;
-
-        return userId.equals(that.userId);
+        return Objects.equals(id, that.id) && userId.equals(that.userId) && title.equals(that.title) && email.equals(that.email);
     }
 
     @Override
     public int hashCode() {
-        return userId.hashCode();
+        return Objects.hash(id, userId, title, email);
     }
 
     @Override
     public String toString() {
         return "CredentialDto{" +
-                "userId='" + userId + '\'' +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
                 ", title='" + title + '\'' +
                 ", email='" + email + '\'' +
                 '}';

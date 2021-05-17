@@ -4,16 +4,26 @@ import java.util.Objects;
 
 public final class UserDto {
 
+    private final String id;
     private final String login;
     private final char[] password;
 
-    private UserDto(String login, char[] password) {
+    private UserDto(String id, String login, char[] password) {
+        this.id = id;
         this.login = login;
         this.password = password;
     }
 
-    public static UserDto create(String login, char[] password) {
-        return new UserDto(login, password);
+    public static UserDto createNewUserDto(String login, char[] password) {
+        return new UserDto("", login, password);
+    }
+
+    public static UserDto createExistingUserDto(String id, String login, char[] password) {
+        return new UserDto(id, login, password);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getLogin() {
@@ -29,18 +39,19 @@ public final class UserDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
-        return login.equals(userDto.login);
+        return Objects.equals(id, userDto.id) && login.equals(userDto.login);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login);
+        return Objects.hash(id, login);
     }
 
     @Override
     public String toString() {
         return "UserDto{" +
-                "login='" + login + '\'' +
+                "id='" + id + '\'' +
+                ", login='" + login + '\'' +
                 '}';
     }
 }

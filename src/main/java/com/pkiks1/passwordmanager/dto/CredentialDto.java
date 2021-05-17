@@ -10,20 +10,51 @@ public final class CredentialDto {
     private final String email;
     private final char[] password;
 
-    private CredentialDto(String id, String userId, String title, String email, char[] password) {
-        this.id = id;
-        this.userId = userId;
-        this.title = title;
-        this.email = email;
-        this.password = password;
+    private CredentialDto(CredentialDtoBuilder credentialDtoBuilder) {
+        this.id = credentialDtoBuilder.id;
+        this.userId = credentialDtoBuilder.userId;
+        this.title = credentialDtoBuilder.title;
+        this.email = credentialDtoBuilder.email;
+        this.password = credentialDtoBuilder.password;
     }
 
-    public static CredentialDto createNewCredentialDto(String userId, String title, String email, char[] password) {
-        return new CredentialDto("", userId, title, email, password);
-    }
+    public static class CredentialDtoBuilder {
+        private String id;
+        private String userId;
+        private String title;
+        private String email;
+        private char[] password;
 
-    public static CredentialDto createExistingCredentialDto(String id, String userId, String title, String email, char[] password) {
-        return new CredentialDto(id, userId, title, email, password);
+        public CredentialDtoBuilder() {}
+
+        public CredentialDtoBuilder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public CredentialDtoBuilder withUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public CredentialDtoBuilder withTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public CredentialDtoBuilder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public CredentialDtoBuilder withPassword(char[] password) {
+            this.password = password;
+            return this;
+        }
+
+        public CredentialDto build() {
+            return new CredentialDto(this);
+        }
     }
 
     public String getId() {
@@ -51,7 +82,7 @@ public final class CredentialDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CredentialDto that = (CredentialDto) o;
-        return Objects.equals(id, that.id) && userId.equals(that.userId) && title.equals(that.title) && email.equals(that.email);
+        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(title, that.title) && Objects.equals(email, that.email);
     }
 
     @Override

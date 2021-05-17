@@ -8,18 +8,38 @@ public final class UserDto {
     private final String login;
     private final char[] password;
 
-    private UserDto(String id, String login, char[] password) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
+    private UserDto(UserDtoBuilder userDtoBuilder) {
+        this.id = userDtoBuilder.id;
+        this.login = userDtoBuilder.login;
+        this.password = userDtoBuilder.password;
     }
 
-    public static UserDto createNewUserDto(String login, char[] password) {
-        return new UserDto("", login, password);
-    }
+    public static class UserDtoBuilder {
 
-    public static UserDto createExistingUserDto(String id, String login, char[] password) {
-        return new UserDto(id, login, password);
+        private String id;
+        private String login;
+        private char[] password;
+
+        public UserDtoBuilder() {}
+
+        public UserDtoBuilder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public UserDtoBuilder withLogin(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public UserDtoBuilder withPassword(char[] password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserDto build() {
+            return new UserDto(this);
+        }
     }
 
     public String getId() {
@@ -39,7 +59,7 @@ public final class UserDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
-        return Objects.equals(id, userDto.id) && login.equals(userDto.login);
+        return Objects.equals(id, userDto.id) && Objects.equals(login, userDto.login);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class CredentialService {
         List<CredentialEntity> allCredentialsEntity;
         List<CredentialDto> allCredentialsDto = new LinkedList<>();
         CredentialDto credentialDto;
-        allCredentialsEntity = credentialRepository.findCredentialEntityByUser(userEntity.getId());
+        allCredentialsEntity = credentialRepository.findCredentialEntityByUser(userDto.getId());
         for( CredentialEntity credentialEntity : allCredentialsEntity){
             credentialDto = new CredentialDto.CredentialDtoBuilder()
                     .withId(credentialEntity.getId())
@@ -52,20 +52,20 @@ public class CredentialService {
 
         return allCredentialsDto;
     }
-    public CredentialDto oneCredentialForUser(CredentialDto credentialDto){
-
+    public Optional<CredentialDto> oneCredentialForUser(CredentialDto credentialDto){
         Optional<CredentialEntity> optionalCredentialEntity;
         optionalCredentialEntity= credentialRepository.findById(credentialDto.getId());
         if(optionalCredentialEntity.isPresent()){
             credentialDto = new CredentialDto.CredentialDtoBuilder()
-                    .withId()
-                    .withTitle()
-                    .withEmail()
-                    .withPassword()
+                    .withId(optionalCredentialEntity.get().getId())
+                    .withTitle(optionalCredentialEntity.get().getTitle())
+                    .withEmail(optionalCredentialEntity.get().getEmail())
+                    .withPassword(optionalCredentialEntity.get().getPassword())
                     .build();
+        }else{
+            credentialDto=null;
         }
-
-        return credentialDto;
+        return Optional.ofNullable(credentialDto);
     }
 
 }

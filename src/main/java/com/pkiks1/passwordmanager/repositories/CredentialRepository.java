@@ -9,4 +9,5 @@ import java.util.List;
 public interface CredentialRepository extends JpaRepository<CredentialEntity, String> {
 
     List<CredentialEntity> findCredentialEntityByUser(String id);
+
 }

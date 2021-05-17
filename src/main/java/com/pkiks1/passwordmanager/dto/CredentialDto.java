@@ -10,44 +10,44 @@ public final class CredentialDto {
     private final String email;
     private final char[] password;
 
-    private CredentialDto(Builder builder) {
-        this.id = builder.id;
-        this.userId = builder.userId;
-        this.title = builder.title;
-        this.email = builder.email;
-        this.password = builder.password;
+    private CredentialDto(CredentialDtoBuilder credentialDtoBuilder) {
+        this.id = credentialDtoBuilder.id;
+        this.userId = credentialDtoBuilder.userId;
+        this.title = credentialDtoBuilder.title;
+        this.email = credentialDtoBuilder.email;
+        this.password = credentialDtoBuilder.password;
     }
 
-    public static class Builder {
+    public static class CredentialDtoBuilder {
         private String id;
         private String userId;
         private String title;
         private String email;
         private char[] password;
 
-        public Builder() {}
+        public CredentialDtoBuilder() {}
 
-        public Builder withId(String id) {
+        public CredentialDtoBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public Builder withUserId(String userId) {
+        public CredentialDtoBuilder withUserId(String userId) {
             this.userId = userId;
             return this;
         }
 
-        public Builder withTitle(String title) {
+        public CredentialDtoBuilder withTitle(String title) {
             this.title = title;
             return this;
         }
 
-        public Builder withEmail(String email) {
+        public CredentialDtoBuilder withEmail(String email) {
             this.email = email;
             return this;
         }
 
-        public Builder withPassword(char[] password) {
+        public CredentialDtoBuilder withPassword(char[] password) {
             this.password = password;
             return this;
         }

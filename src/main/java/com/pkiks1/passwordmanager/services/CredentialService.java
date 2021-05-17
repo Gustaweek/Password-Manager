@@ -2,7 +2,6 @@ package com.pkiks1.passwordmanager.services;
 
 
 import com.pkiks1.passwordmanager.domain.CredentialEntity;
-import com.pkiks1.passwordmanager.domain.UserEntity;
 import com.pkiks1.passwordmanager.dto.CredentialDto;
 import com.pkiks1.passwordmanager.dto.UserDto;
 import com.pkiks1.passwordmanager.repositories.CredentialRepository;
@@ -43,26 +42,27 @@ public class CredentialService {
         CredentialDto credentialDto;
         allCredentialsEntity = credentialRepository.findCredentialEntityByUser(userEntity.getId());
         for( CredentialEntity credentialEntity : allCredentialsEntity){
-            credentialDto = CredentialDto.createExistingCredentialDto(credentialEntity.getId(),
-                    credentialEntity.getUser().getId(),
-                    credentialEntity.getTitle(),
-                    credentialEntity.getEmail(),
-                    "".toCharArray());
+            credentialDto = new CredentialDto.CredentialDtoBuilder()
+                    .withId(credentialEntity.getId())
+                    .withTitle(credentialEntity.getTitle())
+                    .withEmail(credentialEntity.getEmail())
+                    .build();
             allCredentialsDto.add(credentialDto);
         }
 
         return allCredentialsDto;
     }
     public CredentialDto oneCredentialForUser(CredentialDto credentialDto){
+
         Optional<CredentialEntity> optionalCredentialEntity;
-        CredentialDto credentialDto1;
         optionalCredentialEntity= credentialRepository.findById(credentialDto.getId());
         if(optionalCredentialEntity.isPresent()){
-            credentialDto = CredentialDto.createExistingCredentialDto(credentialEntity.getId(),
-                    credentialEntity.getUser().getId(),
-                    credentialEntity.getTitle(),
-                    credentialEntity.getEmail(),
-                    credentialEntity.getPassword());
+            credentialDto = new CredentialDto.CredentialDtoBuilder()
+                    .withId()
+                    .withTitle()
+                    .withEmail()
+                    .withPassword()
+                    .build();
         }
 
         return credentialDto;

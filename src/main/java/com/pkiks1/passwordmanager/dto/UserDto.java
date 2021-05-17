@@ -8,31 +8,31 @@ public final class UserDto {
     private final String login;
     private final char[] password;
 
-    private UserDto(Builder builder) {
-        this.id = builder.id;
-        this.login = builder.login;
-        this.password = builder.password;
+    private UserDto(UserDtoBuilder userDtoBuilder) {
+        this.id = userDtoBuilder.id;
+        this.login = userDtoBuilder.login;
+        this.password = userDtoBuilder.password;
     }
 
-    public static class Builder {
+    public static class UserDtoBuilder {
 
         private String id;
         private String login;
         private char[] password;
 
-        public Builder() {}
+        public UserDtoBuilder() {}
 
-        public Builder withId(String id) {
+        public UserDtoBuilder withId(String id) {
             this.id = id;
             return this;
         }
 
-        public Builder withLogin(String login) {
+        public UserDtoBuilder withLogin(String login) {
             this.login = login;
             return this;
         }
 
-        public Builder withPassword(char[] password) {
+        public UserDtoBuilder withPassword(char[] password) {
             this.password = password;
             return this;
         }

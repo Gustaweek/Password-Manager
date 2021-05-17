@@ -2,6 +2,7 @@ package com.pkiks1.passwordmanager.services;
 
 
 import com.pkiks1.passwordmanager.domain.CredentialEntity;
+import com.pkiks1.passwordmanager.domain.UserEntity;
 import com.pkiks1.passwordmanager.dto.CredentialDto;
 import com.pkiks1.passwordmanager.dto.UserDto;
 import com.pkiks1.passwordmanager.repositories.CredentialRepository;
@@ -40,16 +41,19 @@ public class CredentialService {
         List<CredentialEntity> allCredentialsEntity;
         List<CredentialDto> allCredentialsDto = new LinkedList<>();
         CredentialDto credentialDto;
-        allCredentialsEntity = credentialRepository.findCredentialEntityByUser(userDto.getId());
-        for( CredentialEntity credentialEntity : allCredentialsEntity){
-            credentialDto = new CredentialDto.CredentialDtoBuilder()
-                    .withId(credentialEntity.getId())
-                    .withTitle(credentialEntity.getTitle())
-                    .withEmail(credentialEntity.getEmail())
-                    .build();
-            allCredentialsDto.add(credentialDto);
-        }
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userDto.getId());
+        if (userEntityOptional.isPresent()) {
+            allCredentialsEntity = credentialRepository.findCredentialEntityByUser(userEntityOptional.get());
 
+            for( CredentialEntity credentialEntity : allCredentialsEntity){
+                credentialDto = new CredentialDto.CredentialDtoBuilder()
+                        .withId(credentialEntity.getId())
+                        .withTitle(credentialEntity.getTitle())
+                        .withEmail(credentialEntity.getEmail())
+                        .build();
+                allCredentialsDto.add(credentialDto);
+            }
+        }
         return allCredentialsDto;
     }
     public Optional<CredentialDto> oneCredentialForUser(CredentialDto credentialDto){

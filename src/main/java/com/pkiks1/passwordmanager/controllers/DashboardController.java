@@ -1,6 +1,12 @@
 package com.pkiks1.passwordmanager.controllers;
 
 import com.pkiks1.passwordmanager.domain.CredentialEntity;
+import com.pkiks1.passwordmanager.domain.UserEntity;
+import com.pkiks1.passwordmanager.dto.CredentialDto;
+import com.pkiks1.passwordmanager.dto.UserDto;
+import com.pkiks1.passwordmanager.services.CredentialService;
+import com.pkiks1.passwordmanager.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +19,25 @@ import java.util.List;
 //todo: REFACTOR
 @Controller
 public class DashboardController {
+
+    //TODO remove
+    private static final UserDto testUser = new UserDto.UserDtoBuilder().withId("1252f84c-3d3c-4690-9c61-b9951d5af5f5").build();
+
+    private final CredentialService credentialService;
+    private final UserService userService;
+
+    @Autowired
+    public DashboardController(CredentialService credentialService, UserService userService) {
+        this.credentialService = credentialService;
+        this.userService = userService;
+    }
+
     //list of credentials
     @GetMapping({"/dashboard"})
     public String index(Model model, @RequestParam(required = false) String action) {
         //todo: delete credentials arraylist
-        List credentials = getRandomCreds();
-        model.addAttribute("credentials", credentials);
+
+        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
 
         if ("add".equals(action)) {
             model.addAttribute("addCredential", true);
@@ -32,11 +51,10 @@ public class DashboardController {
     @GetMapping({"/dashboard/{credentialId}"})
     public String index(@PathVariable String credentialId, Model model) {
         //todo: delete credentials arraylist
-        List credentials = getRandomCreds();
-        model.addAttribute("credentials", credentials);
+        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
 
         //todo:delete ccredential
-        model.addAttribute("credential", credentials.get(2));
+        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
         return "dashboard";
     }
 
@@ -44,11 +62,10 @@ public class DashboardController {
     @PostMapping({"/dashboard/{credentialId}"})
     public String index(@PathVariable String credentialId, @RequestParam(required = false) String button, Model model) {
         //todo: delete credentials arraylist
-        List credentials = getRandomCreds();
-        model.addAttribute("credentials", credentials);
+        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
 
         //random credential, todo:delete
-        model.addAttribute("credential", credentials.get(2));
+        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
 
         if ("edit".equals(button))
             model.addAttribute("canEdit", true);//todo: get credential id and add to the model
@@ -59,35 +76,4 @@ public class DashboardController {
         }
         return "dashboard";
     }
-
-    private List getRandomCreds() {
-        List credentials = new ArrayList();
-        for (int i = 0; i < 5; i++) {
-            credentials.add(new CredentialEntity("Facebook.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Twitter.com", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Wikipedia.org", "user4652360@dfdsfsd.com", new char[5], null));
-            credentials.add(new CredentialEntity("Gmail.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Snapchat", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Skype", "user4652360@dfdsfsd.com", new char[5], null));
-            credentials.add(new CredentialEntity("Apple.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Blogspot.com", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Linkedin.com", "user4652360@dfdsfsd.com", new char[5], null));
-            credentials.add(new CredentialEntity("Adobe.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Github.com", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Facebook.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Twitter.com", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Wikipedia.org", "user4652360@dfdsfsd.com", new char[5], null));
-            credentials.add(new CredentialEntity("Gmail.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Snapchat", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Skype", "user4652360@dfdsfsd.com", new char[5], null));
-            credentials.add(new CredentialEntity("Apple.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Blogspot.com", "user2@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Linkedin.com", "user4652360@dfdsfsd.com", new char[5], null));
-            credentials.add(new CredentialEntity("Adobe.com", "user1@d.com", new char[5], null));
-            credentials.add(new CredentialEntity("Github.com", "user2@d.com", new char[5], null));
-        }
-        return credentials;
-    }
-
-
 }

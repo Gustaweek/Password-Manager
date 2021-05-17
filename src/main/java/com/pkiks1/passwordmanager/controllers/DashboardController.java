@@ -1,8 +1,5 @@
 package com.pkiks1.passwordmanager.controllers;
 
-import com.pkiks1.passwordmanager.domain.CredentialEntity;
-import com.pkiks1.passwordmanager.domain.UserEntity;
-import com.pkiks1.passwordmanager.dto.CredentialDto;
 import com.pkiks1.passwordmanager.dto.UserDto;
 import com.pkiks1.passwordmanager.services.CredentialService;
 import com.pkiks1.passwordmanager.services.UserService;
@@ -10,12 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
 //todo: REFACTOR
 @Controller
 public class DashboardController {
@@ -47,33 +40,33 @@ public class DashboardController {
         return "dashboard";
     }
 
-    //details of credential
-    @GetMapping({"/dashboard/{credentialId}"})
-    public String index(@PathVariable String credentialId, Model model) {
-        //todo: delete credentials arraylist
-        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
-
-        //todo:delete ccredential
-        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
-        return "dashboard";
-    }
-
-    //actions on credentials
-    @PostMapping({"/dashboard/{credentialId}"})
-    public String index(@PathVariable String credentialId, @RequestParam(required = false) String button, Model model) {
-        //todo: delete credentials arraylist
-        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
-
-        //random credential, todo:delete
-        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
-
-        if ("edit".equals(button))
-            model.addAttribute("canEdit", true);//todo: get credential id and add to the model
-        else if ("delete".equals(button))
-            model.addAttribute("delete", true);
-        else {
-            //none
-        }
-        return "dashboard";
-    }
+//    //details of credential
+//    @GetMapping({"/dashboard/{credentialId}"})
+//    public String index(@PathVariable String credentialId, Model model) {
+//        //todo: delete credentials arraylist
+//        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
+//
+//        //todo:delete ccredential
+//        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
+//        return "dashboard";
+//    }
+//
+//    //actions on credentials
+//    @PostMapping({"/dashboard/{credentialId}"})
+//    public String index(@PathVariable String credentialId, @RequestParam(required = false) String button, Model model) {
+//        //todo: delete credentials arraylist
+//        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
+//
+//        //random credential, todo:delete
+//        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
+//
+//        if ("edit".equals(button))
+//            model.addAttribute("canEdit", true);//todo: get credential id and add to the model
+//        else if ("delete".equals(button))
+//            model.addAttribute("delete", true);
+//        else {
+//            //none
+//        }
+//        return "dashboard";
+//    }
 }

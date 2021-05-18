@@ -88,11 +88,6 @@
         </div>
     </div>
 
-    <script th:if="${credential!=null}">
-
-        M.toast({html: 'Random item ', classes: 'red white-text', displayLength: 888888})
-    </script>
-
     <div class="col s12 m8 l9" id="credentials-pannel" th:if="${credential!=null || addCredential==true}">
         <p th:if="${addCredential!=null && addCredential==true}">Dodaj hasło</p>
         <form id="credential" th:action="${credential!=null ? '' : 'add'}" method="post"

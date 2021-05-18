@@ -113,7 +113,7 @@
                 <div class="input-field mb0">
                     <input id="password" type="password" name="password" class="toggleMe validate white-text"
                            th:disabled="${canEdit!=true}"
-                           th:value="${credential!=null ? credential.getPassword() : ''}"><!-- todo: define maxlength-->
+                           th:value="${credential!=null ? credential.getPasswordString() : ''}"><!-- todo: define maxlength-->
                     <label for="password">Hasło</label>
                 </div>
                 <label>

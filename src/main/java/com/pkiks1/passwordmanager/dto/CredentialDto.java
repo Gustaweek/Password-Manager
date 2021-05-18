@@ -77,6 +77,10 @@ public final class CredentialDto {
         return password;
     }
 
+    public String getPasswordString() {
+        return String.valueOf(this.getPassword());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

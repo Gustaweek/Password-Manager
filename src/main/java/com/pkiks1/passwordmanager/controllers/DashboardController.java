@@ -1,5 +1,6 @@
 package com.pkiks1.passwordmanager.controllers;
 
+import com.pkiks1.passwordmanager.dto.CredentialDto;
 import com.pkiks1.passwordmanager.dto.UserDto;
 import com.pkiks1.passwordmanager.services.CredentialService;
 import com.pkiks1.passwordmanager.services.UserService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 //todo: REFACTOR
@@ -27,7 +29,7 @@ public class DashboardController {
 
     //list of credentials
     @GetMapping({"/dashboard"})
-    public String index(Model model, @RequestParam(required = false) String action) {
+    public String listAllCredentials(Model model, @RequestParam(required = false) String action) {
         //todo: delete credentials arraylist
 
         model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
@@ -40,17 +42,17 @@ public class DashboardController {
         return "dashboard";
     }
 
-//    //details of credential
-//    @GetMapping({"/dashboard/{credentialId}"})
-//    public String index(@PathVariable String credentialId, Model model) {
-//        //todo: delete credentials arraylist
-//        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
-//
-//        //todo:delete ccredential
-//        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
-//        return "dashboard";
-//    }
-//
+    //details of credential
+    @GetMapping({"/dashboard/{credentialId}"})
+    public String getSelectedCredential(@PathVariable String credentialId, Model model) {
+        //todo: delete credentials arraylist
+        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
+
+        //todo:delete ccredential
+        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()).get());
+        return "dashboard";
+    }
+
 //    //actions on credentials
 //    @PostMapping({"/dashboard/{credentialId}"})
 //    public String index(@PathVariable String credentialId, @RequestParam(required = false) String button, Model model) {

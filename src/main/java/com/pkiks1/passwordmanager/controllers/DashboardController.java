@@ -32,7 +32,7 @@ public class DashboardController {
     public String listAllCredentials(Model model, @RequestParam(required = false) String action) {
         //todo: delete credentials arraylist
 
-        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
+        model.addAttribute("credentials", credentialService.getAllCredentialsForUser(testUser));
 
         if ("add".equals(action)) {
             model.addAttribute("addCredential", true);
@@ -46,10 +46,10 @@ public class DashboardController {
     @GetMapping({"/dashboard/{credentialId}"})
     public String getSelectedCredential(@PathVariable String credentialId, Model model) {
         //todo: delete credentials arraylist
-        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
+        model.addAttribute("credentials", credentialService.getAllCredentialsForUser(testUser));
 
         //todo:delete ccredential
-        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()).get());
+        model.addAttribute("credential", credentialService.getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()).get());
         return "dashboard";
     }
 

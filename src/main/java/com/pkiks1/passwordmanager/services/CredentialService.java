@@ -27,7 +27,8 @@ public class CredentialService {
         this.userRepository = userRepository;
     }
 
-    public void createCredential (CredentialDto credentialDto){
+
+    public void createCredential(CredentialDto credentialDto) {
         //TODO validation credentialDto
 
         credentialRepository.save(new CredentialEntity(credentialDto.getTitle(),
@@ -36,40 +37,46 @@ public class CredentialService {
                 userRepository.findById(credentialDto.getUserId()).get()));
     }
 
-    public List<CredentialDto> allCredentialsForUser(UserDto userDto){
+    public List<CredentialDto> getAllCredentialsForUser(UserDto userDto) {
 
-        List<CredentialEntity> allCredentialsEntity;
-        List<CredentialDto> allCredentialsDto = new LinkedList<>();
+        List<CredentialEntity> credentials;
+        List<CredentialDto> credentialDtos = new LinkedList<>();
         CredentialDto credentialDto;
+
         Optional<UserEntity> userEntityOptional = userRepository.findById(userDto.getId());
         if (userEntityOptional.isPresent()) {
-            allCredentialsEntity = credentialRepository.findCredentialEntityByUser(userEntityOptional.get());
+            credentials = credentialRepository.findCredentialEntitiesByUser(userEntityOptional.get());
 
-            for( CredentialEntity credentialEntity : allCredentialsEntity){
+            for (CredentialEntity credentialEntity : credentials) {
                 credentialDto = new CredentialDto.CredentialDtoBuilder()
                         .withId(credentialEntity.getId())
                         .withTitle(credentialEntity.getTitle())
                         .withEmail(credentialEntity.getEmail())
                         .build();
-                allCredentialsDto.add(credentialDto);
+                credentialDtos.add(credentialDto);
             }
         }
-        return allCredentialsDto;
-    }
-    public Optional<CredentialDto> oneCredentialForUser(CredentialDto credentialDto){
-        Optional<CredentialEntity> optionalCredentialEntity;
-        optionalCredentialEntity= credentialRepository.findById(credentialDto.getId());
-        if(optionalCredentialEntity.isPresent()){
-            credentialDto = new CredentialDto.CredentialDtoBuilder()
-                    .withId(optionalCredentialEntity.get().getId())
-                    .withTitle(optionalCredentialEntity.get().getTitle())
-                    .withEmail(optionalCredentialEntity.get().getEmail())
-                    .withPassword(optionalCredentialEntity.get().getPassword())
-                    .build();
-        }else{
-            credentialDto=null;
-        }
-        return Optional.ofNullable(credentialDto);
+
+        return credentialDtos;
     }
 
+    public Optional<CredentialDto> getCredentialForUser(CredentialDto credentialDto) {
+
+        Optional<CredentialEntity> optionalCredential;
+        optionalCredential = credentialRepository.findById(credentialDto.getId());
+
+        if (optionalCredential.isPresent()) {
+            credentialDto = new CredentialDto.CredentialDtoBuilder()
+                    .withId(optionalCredential.get().getId())
+                    .withTitle(optionalCredential.get().getTitle())
+                    .withEmail(optionalCredential.get().getEmail())
+                    .withPassword(optionalCredential.get().getPassword())
+                    .build();
+        } else {
+            credentialDto = null;
+        }
+
+        //TODO refactor return
+        return Optional.ofNullable(credentialDto);
+    }
 }

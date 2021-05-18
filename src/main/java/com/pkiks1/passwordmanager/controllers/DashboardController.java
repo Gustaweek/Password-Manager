@@ -30,7 +30,7 @@ public class DashboardController {
     public String index(Model model, @RequestParam(required = false) String action) {
         //todo: delete credentials arraylist
 
-        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
+        model.addAttribute("credentials", credentialService.getAllCredentialsForUser(testUser));
 
         if ("add".equals(action)) {
             model.addAttribute("addCredential", true);

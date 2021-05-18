@@ -2,10 +2,160 @@
 <html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Strona główna</title>
+    <title>Dashboard</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!--todo: link local css and script-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link th:href="@{/styles/style.css}" rel="stylesheet">
+
 </head>
-<body>
-<h1 th:text="${'Witaj ' + login}"></h1>
+<body class="blue-grey darken-3 white-text dashboard">
+<!-- menu -->
+<nav class="blue darken-4 mb20"><!--todo: update link href-->
+    <div class="nav-wrapper">
+        <a class="brand-logo m0" th:href="${'/dashboard'}" th:text="${'Moje hasła'}"></a>
+        <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+            <li><a th:href="${'#/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
+            </li>
+            <li><a th:href="${'#/settings'}"><i class="material-icons left">settings</i>Ustawienia</a></li>
+            <li><a th:href="${'#/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
+            <li><a th:href="${'#/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+        </ul>
+    </div>
+    <ul class="sidenav blue darken-4" id="mobile-menu">
+        <li class="blue darken-3 white-text">
+            <div class="user-view"><!--todo: update user variables-->
+                <span class="white-text name" th:text="${'Login ' + login}"></span>
+                <span class="white-text email" th:text="${'Mail ' + credentialId}"></span>
+            </div>
+            <a th:href="${'#/logout'}" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a>
+        </li>
+        <li class=""><a th:href="${'#/password-generator'}" class="white-text"><i class="material-icons white-text">settings</i>Generator
+            haseł</a></li>
+        <li class=""><a th:href="${'#/settings'}" class="white-text"><i class="material-icons white-text">settings</i>Ustawienia</a>
+        </li>
+        <li class=""><a th:href="${'#/add'}" class="white-text"><i
+                class="material-icons white-text">add_circle_outline</i>Dodaj</a></li>
+    </ul>
+</nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {edge: 'right', draggable: true});
+    });
+
+</script>
+<!-- menu end -->
+<!--add button-->
+<div class="fixed-action-btn">
+    <a th:href="${'/dashboard/?action=add'}" class="btn-floating btn-large green">
+        <i class="large material-icons waves-effect">add_circle_outline</i>
+    </a>
+</div>
+<!--end: add button-->
+<!-- Page Layout here -->
+<div class="row" id="main">
+    <div class="col s12 m4 l3" id="list-pannel">
+        <div id="credentials">
+            <div class="credentials-searcher">
+                <div class="input-field">
+                    <i class="material-icons prefix">search</i>
+                    <input id="credentials-search" type="text" class="white-text">
+                    <label for="credentials-search" class="white-text">Wyszukaj</label>
+                    <span id="num-of-results" class="helper-text right-align white-text" data-error="wrong"
+                          data-success="right"></span>
+                </div>
+
+            </div>
+            <div id="credentials-list">
+                <ul class="collection">
+                    <li th:each="credential, iStat: ${credentials}" th:id="'credential'+${credential.getId()}"
+                        th:class="'collection-item white-text p0  blue-grey darken-4 my12 z-depth-2'">
+                        <!--todo: refactor-->
+                        <a th:href="${'/dashboard/'}+${credential.getId()}" class="white-text bold waves-effect">
+                            <p class="title m0 p12 py4" th:text="${credential.getTitle()}">title</p>
+                            <p class="description m0 p12 py4 grey-text lighten-3" th:text="${credential.getEmail()}">
+                                email</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script th:if="${credential!=null}">
+
+        M.toast({html: 'Random item ', classes: 'red white-text', displayLength: 888888})
+    </script>
+
+    <div class="col s12 m8 l9" id="credentials-pannel" th:if="${credential!=null || addCredential==true}">
+        <p th:if="${addCredential!=null && addCredential==true}">Dodaj hasło</p>
+        <form id="credential" th:action="${credential!=null ? '' : 'add'}" method="post"
+              th:class="${credential!=null ? 'edit' : 'add'}"><!--todo: change action path-->
+            <div class="input-field">
+                <input id="title" type="text" class="validate white-text" name="title"
+                       th:value="${credential!=null ? credential.getTitle() : ''}"
+                       th:disabled="${canEdit!=true}"><!-- todo: define maxlength-->
+                <label for="title">Tytuł</label>
+            </div>
+
+            <div class="input-field">
+                <input id="email" type="email" class="validate white-text" name="email" th:disabled="${canEdit!=true}"
+                       th:value="${credential!=null ? credential.getEmail() : ''}"><!-- todo: define maxlength-->
+                <label for="email">E-mail</label>
+            </div>
+            <div class="mb20">
+                <div class="input-field mb0">
+                    <input id="password" type="password" name="password" class="toggleMe validate white-text"
+                           th:disabled="${canEdit!=true}"
+                           th:value="${credential!=null ? credential.getPassword() : ''}"><!-- todo: define maxlength-->
+                    <label for="password">Hasło</label>
+                </div>
+                <label>
+                    <input type="checkbox" onclick="togglePasswordVisibility()"/>
+                    <span class="white-text">Wyświetl hasło</span>
+                </label>
+            </div>
+
+            <div class="input-field note mt30">
+                <textarea id="note" name="note" class="materialize-textarea validate white-text"
+                          th:disabled="${canEdit!=true}"
+                          th:text="${credential!=null ? 'not implemented yet' : ''}"></textarea>
+                <!-- todo: default value, define maxlength-->
+                <label for="note">Notatka</label>
+            </div>
+
+            <input th:type="'hidden'" th:value="''" disabled><!--todo: value-->
+
+            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}" th:if="${canEdit!=true}">
+                <button class="btn green waves-effect waves-light" type="submit" name="button" value="edit">Edytuj
+                    <i class="material-icons left">edit</i>
+                </button>
+            </div>
+            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}" th:if="${canEdit==true}">
+                <button class="btn green waves-effect waves-light" type="submit" name="button" value="save">Zapisz
+                    <i class="material-icons left">save</i>
+                </button>
+            </div>
+            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}" th:if="${canEdit==true}">
+                <button class="btn green waves-effect waves-light" type="submit" name="button" value="cancel">Anuluj
+                    <i class="material-icons left">cancel</i>
+                </button>
+            </div>
+            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}">
+                <button class="btn red waves-effect waves-light" type="submit" name="button" value="delete">Usuń
+                    <i class="material-icons left">delete_forever</i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script th:src="@{/scripts/app.js}"></script>
 </body>
 </html>

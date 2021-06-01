@@ -3,6 +3,7 @@ package com.pkiks1.passwordmanager.services;
 import com.pkiks1.passwordmanager.domain.UserEntity;
 import com.pkiks1.passwordmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.CredentialException;
@@ -12,10 +13,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean isCredentialsCorrect(String login, char[] password) {
@@ -28,7 +31,8 @@ public class UserService {
     }
 
     private void createUser(String login, char[] password) {
-        userRepository.save(new UserEntity(login, password));
+        userRepository.save(new UserEntity(login,
+                passwordEncoder.encode(new String(password)).toCharArray()));
     }
 
     public boolean registerUser(String login, char[] firstPassword, char[] secondPassword) throws CredentialException {

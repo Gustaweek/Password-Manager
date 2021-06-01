@@ -57,8 +57,13 @@ public class DashboardController {
     @PostMapping({"/dashboard/{credentialId}"})
     public String updateCredential(@PathVariable String credentialId,
                                    @RequestParam(required = false) String button,
+                                   @RequestParam(name = "title") String title,
+                                   @RequestParam(name = "email") String email,
+                                   @RequestParam(name = "password") String password,
+                                   @RequestParam(name = "note") String note,
                                    Model model) {
 
+        credentialService.updateCredential(new CredentialDto.CredentialDtoBuilder().withId(credentialId).withTitle(title).withEmail(email).withPassword(password.toCharArray()).build());
         //todo: delete credentials arraylist
         model.addAttribute("credentials", credentialService.getAllCredentialsForUser(testUser));
         model.addAttribute("credential", credentialService.getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()).get());

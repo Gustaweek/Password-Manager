@@ -37,6 +37,10 @@ public class CredentialService {
                 userRepository.findById(credentialDto.getUserId()).get()));
     }
 
+    public void updateCredential(String id){
+
+    }
+
     public List<CredentialDto> getAllCredentialsForUser(UserDto userDto) {
 
         List<CredentialEntity> credentials;

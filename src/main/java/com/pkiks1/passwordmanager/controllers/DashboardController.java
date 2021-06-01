@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 //todo: REFACTOR
@@ -53,22 +54,22 @@ public class DashboardController {
         return "dashboard";
     }
 
-//    //actions on credentials
-//    @PostMapping({"/dashboard/{credentialId}"})
-//    public String index(@PathVariable String credentialId, @RequestParam(required = false) String button, Model model) {
-//        //todo: delete credentials arraylist
-//        model.addAttribute("credentials", credentialService.allCredentialsForUser(testUser));
-//
-//        //random credential, todo:delete
-//        model.addAttribute("credential", credentialService.oneCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()));
-//
-//        if ("edit".equals(button))
-//            model.addAttribute("canEdit", true);//todo: get credential id and add to the model
-//        else if ("delete".equals(button))
-//            model.addAttribute("delete", true);
-//        else {
-//            //none
-//        }
-//        return "dashboard";
-//    }
+    //actions on credentials
+    @PostMapping({"/dashboard/{credentialId}"})
+    public String updateCredential(@PathVariable String credentialId, @RequestParam(required = false) String button, Model model) {
+        //todo: delete credentials arraylist
+        model.addAttribute("credentials", credentialService.getAllCredentialsForUser(testUser));
+
+        //random credential, todo:delete
+        model.addAttribute("credential", credentialService.getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withUserId(testUser.getId()).withId(credentialId).build()).get());
+
+        if ("edit".equals(button))
+            model.addAttribute("canEdit", true);//todo: get credential id and add to the model
+        else if ("delete".equals(button))
+            model.addAttribute("delete", true);
+        else {
+            //none
+        }
+        return "dashboard";
+    }
 }

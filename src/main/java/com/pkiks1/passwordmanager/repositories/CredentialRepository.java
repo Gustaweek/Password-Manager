@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public interface CredentialRepository extends JpaRepository<CredentialEntity, String> {
 
     List<CredentialEntity> findCredentialEntitiesByUser(UserEntity userEntity);
-
 }

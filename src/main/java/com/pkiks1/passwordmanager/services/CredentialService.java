@@ -37,6 +37,18 @@ public class CredentialService {
                 userRepository.findById(credentialDto.getUserId()).get()));
     }
 
+    public void updateCredential(CredentialDto credentialDto){
+        Optional<CredentialEntity> optionalCredentialEntity;
+        optionalCredentialEntity = credentialRepository.findById(credentialDto.getId());
+        if(optionalCredentialEntity.isPresent()){
+            CredentialEntity credentialEntity = optionalCredentialEntity.get();
+            credentialEntity.setTitle(credentialDto.getTitle());
+            credentialEntity.setEmail(credentialDto.getEmail());
+            credentialEntity.setPassword(credentialDto.getPassword());
+            credentialRepository.save(credentialEntity);
+        }
+    }
+
     public List<CredentialDto> getAllCredentialsForUser(UserDto userDto) {
 
         List<CredentialEntity> credentials;

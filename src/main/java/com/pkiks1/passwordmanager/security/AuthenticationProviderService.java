@@ -39,7 +39,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
     }
 
     @Override
-    public boolean supports(Class<?> aClass) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(aClass);
+    public boolean supports(Class<?> authType) {
+        return authType.equals(UsernamePasswordAuthenticationToken.class);
     }
 }

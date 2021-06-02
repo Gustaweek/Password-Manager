@@ -2,9 +2,11 @@ package com.pkiks1.passwordmanager.controllers;
 
 import com.pkiks1.passwordmanager.dto.CredentialDto;
 import com.pkiks1.passwordmanager.dto.UserDto;
+import com.pkiks1.passwordmanager.security.PasswordManagerUser;
 import com.pkiks1.passwordmanager.services.CredentialService;
 import com.pkiks1.passwordmanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
@@ -33,6 +35,9 @@ public class DashboardController {
     @GetMapping({"/dashboard"})
     public String listAllCredentials(Model model, @RequestParam(required = false) String action) {
         //todo: delete credentials arraylist
+
+        //todo how to use user of app
+        PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         model.addAttribute("credentials", credentialService.getAllCredentialsForUser(testUser));
 

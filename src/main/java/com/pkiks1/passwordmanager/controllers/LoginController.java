@@ -22,16 +22,4 @@ public class LoginController {
     public String getLoginPage(Model model) {
         return "login";
     }
-
-    /*
-    @PostMapping
-    public String logIn(@RequestParam(name = "login") String login, @RequestParam(name = "password") char[] password, Model model) {
-        if (userService.isCredentialsCorrect(login, password)) {
-            model.addAttribute("login", login);
-            return "dashboard";
-        }
-        model.addAttribute("loginFailed", true);
-        return getLoginPage(model);
-    }
-    */
 }

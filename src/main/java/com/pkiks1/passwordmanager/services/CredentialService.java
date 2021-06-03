@@ -49,13 +49,13 @@ public class CredentialService {
         }
     }
 
-    public List<CredentialDto> getAllCredentialsForUser(UserDto userDto) {
+    public List<CredentialDto> getAllCredentialsForUserId(String userId) {
 
         List<CredentialEntity> credentials;
         List<CredentialDto> credentialDtos = new LinkedList<>();
         CredentialDto credentialDto;
 
-        Optional<UserEntity> userEntityOptional = userRepository.findById(userDto.getId());
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
         if (userEntityOptional.isPresent()) {
             credentials = credentialRepository.findCredentialEntitiesByUser(userEntityOptional.get());
 

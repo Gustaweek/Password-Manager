@@ -31,7 +31,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
         if (passwordEncoder.matches(password, user.getPassword()))
             return new UsernamePasswordAuthenticationToken(
-                    user.getUsername(),
+                    user,
                     user.getPassword(),
                     user.getAuthorities());
         else

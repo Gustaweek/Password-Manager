@@ -63,6 +63,15 @@ public class DashboardController {
         return getSelectedCredential(credentialId, model);
     }
 
+    @GetMapping("/dashboard/add")
+    public String getCredentialAddForm(Model model) {
+
+        model.addAttribute("addCredential", true);
+        model.addAttribute("canEdit", true);
+
+        return listAllCredentials(model);
+    }
+
     //actions on credentials
     @PostMapping({"/dashboard/{credentialId}"})
     public String updateCredential(@PathVariable String credentialId,
@@ -86,13 +95,26 @@ public class DashboardController {
 
         return listAllCredentials(model);
     }
+
+    @PostMapping("/dashboard")
+    public String addCredential(@RequestParam String title,
+                                @RequestParam String email,
+                                @RequestParam String password,
+                                @RequestParam String note,
+                                Model model) {
+
+        PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        credentialService.createCredential(new CredentialDto.CredentialDtoBuilder()
+        .withUserId(user.getId())
+        .withTitle(title)
+        .withEmail(email)
+        .withPassword(password.toCharArray())
+        .build());
+
+        return listAllCredentials(model);
+    }
 }
 
-
-//        if ("add".equals(action)) {
-//            model.addAttribute("addCredential", true);
-//            model.addAttribute("canEdit", true);//todo: get credential id and add to the model
-//        }
 //if ("edit".equals(button))
 //        else if ("delete".equals(button))
 //        model.addAttribute("delete", true);

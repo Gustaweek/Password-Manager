@@ -63,6 +63,14 @@ public class DashboardController {
         return getSelectedCredential(credentialId, model);
     }
 
+    @GetMapping("/dashboard/{credentialId}/delete")
+    public String deleteCredential(@PathVariable String credentialId, Model model) {
+
+        credentialService.deleteCredential(credentialId);
+        model.addAttribute("delete", true);
+        return listAllCredentials(model);
+    }
+
     @GetMapping("/dashboard/add")
     public String getCredentialAddForm(Model model) {
 
@@ -114,10 +122,3 @@ public class DashboardController {
         return listAllCredentials(model);
     }
 }
-
-//if ("edit".equals(button))
-//        else if ("delete".equals(button))
-//        model.addAttribute("delete", true);
-//        else {
-//        //none
-//        }

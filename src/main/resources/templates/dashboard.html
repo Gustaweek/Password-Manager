@@ -33,14 +33,12 @@
                 <span class="white-text name" th:text="${'Login ' + login}"></span>
                 <span class="white-text email" th:text="${'Mail ' + credentialId}"></span>
             </div>
-            <a th:href="${'#/logout'}" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a>
+            <a th:href="@{/logout}" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a>
         </li>
         <li class=""><a th:href="${'#/password-generator'}" class="white-text"><i class="material-icons white-text">settings</i>Generator
             haseł</a></li>
         <li class=""><a th:href="${'#/settings'}" class="white-text"><i class="material-icons white-text">settings</i>Ustawienia</a>
         </li>
-        <li class=""><a th:href="${'#/add'}" class="white-text"><i
-                class="material-icons white-text">add_circle_outline</i>Dodaj</a></li>
     </ul>
 </nav>
 <script>
@@ -144,14 +142,16 @@
                 </button>
             </div>
             <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}">
-                <button class="btn red waves-effect waves-light" type="submit" name="button" value="delete">Usuń
+                <a class="btn red waves-effect waves-light"
+                   th:href="@{/dashboard/{credentialId}/delete(credentialId = ${credential.getId()})}">Usuń
                     <i class="material-icons left">delete_forever</i>
-                </button>
+                </a>
             </div>
         </form>
     </div>
 
 </div>
 <script th:src="@{/scripts/app.js}"></script>
+<script th:if="${abc}">alert("krokodyl")</script>
 </body>
 </html>

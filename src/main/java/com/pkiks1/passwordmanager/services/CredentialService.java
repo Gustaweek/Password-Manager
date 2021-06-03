@@ -91,4 +91,12 @@ public class CredentialService {
         //TODO refactor return
         return Optional.ofNullable(credentialDto);
     }
+
+    public void deleteCredential(String credentialId) {
+
+        Optional<CredentialEntity> credentialEntityOptional = credentialRepository
+                .findById(credentialId);
+
+        credentialEntityOptional.ifPresent(credentialRepository::delete);
+    }
 }

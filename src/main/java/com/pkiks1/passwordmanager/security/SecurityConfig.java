@@ -28,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/dashboard", true);
         http.authorizeRequests().antMatchers("/register").permitAll();
+        http.authorizeRequests().antMatchers("/password-generator").permitAll();
         http.authorizeRequests().antMatchers("/images/**", "/scripts/**", "/styles/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
     }

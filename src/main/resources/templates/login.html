@@ -3,31 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Logowanie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link th:href="@{/styles/style.css}" rel="stylesheet">
+    <link th:href="@{/styles/materialize.css}" rel="stylesheet">
+    <script th:src="@{/scripts/materialize.js}"></script>
 </head>
-<body>
-<div class="loginContainer">
-    <form th:action="@{/login}" method="post">
-        <div>
-            <label><p>Login</p>
-                <input type="text" name="username" placeholder="login" required>
-            </label>
+<body class="blue-grey darken-3 white-text login">
+<div class="fill">
+<!-- menu -->
+<nav class="blue darken-4 mb0"><!--todo: update link href-->
+    <div class="nav-wrapper">
+        <a class="brand-logo m0" th:href="${'/'}" th:text="${'Password Manager'}"></a>
+        <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
+            </li>
+        </ul>
+    </div>
+    <ul class="sidenav blue darken-4" id="mobile-menu">
+        <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
+            haseł</a></li>
+    </ul>
+</nav>
+<div id="main">
+    <div class="formContainer">
+        <h4 class="center my12">Zaluguj się</h4>
+    <form th:action="@{/login}" method="post" id="loginform">
+        <div class="input-field">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="username" type="text"  name="username" autofocus required>
+            <label for="username">Login</label>
         </div>
-        <div>
-            <label><p>Hasło</p>
-                <input type="password" name="password" placeholder="hasło" required>
-            </label>
+        <div class="input-field">
+            <i class="material-icons prefix">vpn_key</i>
+            <input id="password" type="text"  name="password" required>
+            <label for="username">Hasło</label>
         </div>
         <div th:if="${loginFailed}">
             <p th:class="error">Wprowadzono błędny login lub hasło</p>
         </div>
-        <div>
-            <input type="submit" value="Zaloguj">
+        <div class="center">
+            <button type="submit" value="Zaloguj" class="btn waves-effect waves-light"><i class="material-icons right">input</i>Zaloguj</button>
         </div>
-        <div>
-            <p>Nie masz konta, <a th:href="@{/register}">zarejestruj się</a>.</p>
-        </div>
+
     </form>
+    <div class="center">
+        <p>Nie masz konta, <a th:href="@{/register}">zarejestruj się</a>.</p>
+    </div>
+    </div>
+</div>
 </div>
 </body>
 </html>

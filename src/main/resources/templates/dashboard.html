@@ -5,11 +5,10 @@
     <title>Dashboard</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <!--todo: link local css and script-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link th:href="@{/styles/style.css}" rel="stylesheet">
+    <link th:href="@{/styles/materialize.css}" rel="stylesheet">
+    <script th:src="@{/scripts/materialize.js}"></script>
+    <script th:src="@{/scripts/generator.js}"></script>
 
 </head>
 <body class="blue-grey darken-3 white-text dashboard">
@@ -20,7 +19,7 @@
         <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
 
-            <li><a th:href="${'#/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
+            <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
             </li>
             <li><a th:href="${'#/settings'}"><i class="material-icons left">settings</i>Ustawienia</a></li>
             <li><a th:href="${'#/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
@@ -35,9 +34,9 @@
             </div>
             <a th:href="@{/logout}" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a>
         </li>
-        <li class=""><a th:href="${'#/password-generator'}" class="white-text"><i class="material-icons white-text">settings</i>Generator
+        <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
             haseł</a></li>
-        <li class=""><a th:href="${'#/settings'}" class="white-text"><i class="material-icons white-text">settings</i>Ustawienia</a>
+        <li class=""><a th:href="${'/settings'}" class="white-text"><i class="material-icons white-text">settings</i>Ustawienia</a>
         </li>
     </ul>
 </nav>
@@ -90,28 +89,32 @@
         <p th:if="${addCredential!=null && addCredential==true}">Dodaj hasło</p>
         <form id="credential" th:action="@{/dashboard/{credentialId}(credentialId = ${credential != null ? credential.getId() : ''})}" method="post"
               th:class="${credential!=null ? 'edit' : 'add'}"><!--todo: change action path-->
-            <div class="input-field">
-                <input id="title" type="text" class="validate white-text" name="title"
+            <div class="input-field"><!--todo: chhange lengths-->
+                <input id="title" type="text" class="validate white-text" name="title" minlength="4" maxlength="30"
                        th:value="${credential!=null ? credential.getTitle() : ''}"
                        th:disabled="${canEdit!=true}"><!-- todo: define maxlength-->
                 <label for="title">Tytuł</label>
             </div>
 
             <div class="input-field">
-                <input id="email" type="email" class="validate white-text" name="email" th:disabled="${canEdit!=true}"
+                <input id="email" type="email" class="validate white-text" name="email" th:disabled="${canEdit!=true}"  minlength="4" maxlength="30"
                        th:value="${credential!=null ? credential.getEmail() : ''}"><!-- todo: define maxlength-->
                 <label for="email">E-mail</label>
             </div>
             <div class="mb20">
-                <div class="input-field mb0">
-                    <input id="password" type="password" name="password" class="toggleMe validate white-text"
+                <div class="mb0 passWithGenerator">
+                    <div class="input-field">
+                    <input id="password" type="password" name="password" class="toggleMe validate white-text" minlength="4" maxlength="30"
                            th:disabled="${canEdit!=true}"
                            th:value="${credential!=null ? credential.getPasswordString() : ''}"><!-- todo: define maxlength-->
                     <label for="password">Hasło</label>
+                    </div>
+                    <p th:if="${canEdit==true}"><a href="#generatorModal" class="modal-trigger btn small">Wygeneruj hasło</a></p>
                 </div>
                 <label>
                     <input type="checkbox" onclick="togglePasswordVisibility()"/>
                     <span class="white-text">Wyświetl hasło</span>
+
                 </label>
             </div>
 
@@ -125,33 +128,82 @@
 
             <input th:type="'hidden'" th:value="''" disabled><!--todo: value-->
 
-            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}" th:if="${canEdit!=true}">
+            <div th:class="'input-field center-align col s6'" th:if="${canEdit!=true}">
                 <a class="btn green waves-effect waves-light"
                    th:href="@{/dashboard/{credentialId}/edit(credentialId = ${credential.getId()})}">Edytuj
                     <i class="material-icons left">edit</i>
                 </a>
             </div>
-            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}" th:if="${canEdit==true}">
-                <button class="btn green waves-effect waves-light" type="submit" name="button" value="save">Zapisz
-                    <i class="material-icons left">save</i>
+            <div th:class="'input-field center-align col '+ ${(canEdit==true && addCredential==true) ? 's6' : 's4'}" th:if="${canEdit==true}">
+                <button class="btn green waves-effect waves-light" type="submit" name="button" value="save"><span th:text="${(addCredential!=true)? 'Zapisz' : 'Dodaj'}"></span>
+                    <i class="material-icons left">cloud_done</i>
                 </button>
             </div>
-            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}" th:if="${canEdit==true}">
-                <button class="btn green waves-effect waves-light" type="submit" name="button" value="cancel">Anuluj
+            <div th:class="'input-field center-align col '+ ${(canEdit==true && addCredential==true) ? 's6' : 's4'}" th:if="${canEdit==true}">
+                <button class="btn orange waves-effect waves-light" type="submit" name="button" value="cancel">Anuluj
                     <i class="material-icons left">cancel</i>
                 </button>
             </div>
-            <div th:class="'input-field center-align col '+ ${canEdit==true ? 's4' : 's6'}">
-                <a class="btn red waves-effect waves-light"
-                   th:href="@{/dashboard/{credentialId}/delete(credentialId = ${credential.getId()})}">Usuń
-                    <i class="material-icons left">delete_forever</i>
-                </a>
-            </div>
-        </form>
-    </div>
+            <div th:class="'input-field center-align col '+ ${(canEdit!=true) ? 's6' : 's4'}" th:if="${addCredential!=true}">
+                <a class="btn red waves-effect waves-light" th:href="@{/dashboard/{credentialId}/delete(credentialId = ${credential.getId()})}">Usuń
+                 <i class="material-icons left">delete_forever</i>
+             </a>
+         </div>
+     </form>
+ </div>
 
+</div>
+<div id="generatorModal" class="modal modal-fixed-footer grey  darken-4"  th:if="${canEdit==true}">
+    <div class="modal-content">
+        <div id="generator">
+            <div class="center my12">
+                <p id="generatedPassword">&nbsp;</p>
+            </div>
+
+            <div class="center">
+                <p class="waves-effect waves-light btn" id="copyPass" onclick="usePass();"><i class="material-icons right">get_app</i>Użyj tego hasła</p>
+                <p class="waves-effect waves-light btn" onclick="genetatePass();"><i class="material-icons right">cached</i>Wygeneruj nowe</p>
+            </div>
+
+            <div>
+                <p class="range-field">
+                    Długość hasła
+                    <input type="range" id="genLength" min="4" max="50"  value="12" step="1"  oninput="genetatePass();" onchange="genetatePass();"/>
+                </p>
+            </div>
+
+            <!--todo: password generator numbers/letters/special-->
+            <div class="my12">
+                <label class="blue-text">
+                    <i class="material-icons Small">looks_one</i>
+                    <input type="checkbox" class="filled-in" id="nums" checked onclick="genetatePass();"/>
+                    <span>Liczby</span>
+                </label>
+            </div>
+            <div class="my12">
+                <label class="green-text">
+                    <i class="material-icons">sort_by_alpha</i>
+                    <input type="checkbox" class="filled-in" id="letters" checked onclick="genetatePass();"/>
+                    <span>Litery</span>
+                </label>
+            </div>
+            <div class="my12">
+                <label class="red-text">
+                    <i class="material-icons">attach_money</i>
+                    <input type="checkbox" class="filled-in" id="special" checked onclick="genetatePass();"/>
+                    <span>Znaki specjalne</span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat"> <i class="material-icons right medium">close</i>Zamknij</a>
+    </div>
 </div>
 <script th:src="@{/scripts/app.js}"></script>
 <script th:if="${abc}">alert("krokodyl")</script>
+<script>
+    genetatePass();
+</script>
 </body>
 </html>

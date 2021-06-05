@@ -3,49 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Rejestracja</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link th:href="@{/styles/style.css}" rel="stylesheet">
+    <link th:href="@{/styles/materialize.css}" rel="stylesheet">
+    <script th:src="@{/scripts/materialize.js}"></script>
     <link th:href="@{/styles/jquery-ui.min.css}" rel="stylesheet">
     <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
     <script th:src="@{/scripts/jquery-ui.min.js}"></script>
 </head>
-<body>
-<div>
-    <form th:action="@{/register}" method="post">
-        <div>
-            <label><p>Podaj login</p>
-                <input type="text" name="login" minlength="4" maxlength="20" required th:value="${login}">
-            </label>
+<body class="blue-grey darken-3 white-text login">
+<div class="fill">
+    <!-- menu -->
+    <nav class="blue darken-4 mb0"><!--todo: update link href-->
+        <div class="nav-wrapper">
+            <a class="brand-logo m0" th:href="${'/'}" th:text="${'Password Manager'}"></a>
+            <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
+                </li>
+            </ul>
         </div>
-        <div>
-            <label><p>Podaj hasło</p>
-                <input type="password" name="firstPassword" id="firstPassword" minlength="4" maxlength="20" required>
-            </label>
-        </div>
-        <div>
-            <label><p>Powtórz hasło</p>
-                <input type="password" name="secondPassword" id="secondPassword" minlength="4" maxlength="20" required>
-            </label>
-        </div>
-        <div>
-            <label>
-                <input type="checkbox" required>
-                Akceptuję <a href="#" onclick="showUserAgreementModal()">regulamin korzystania z serwisu</a>.
-            </label>
-        </div>
-        <div th:if="${loginExistsError} or ${incorrectData}">
-            <p th:if="${loginExistsError}" th:class="error">Podany login już istnieje, wybierz inny</p>
-            <p th:if="${incorrectData}" th:class="error">Podane dane są niepoprawne</p>
-        </div>
-        <div>
-            <input type="submit" value="Zarejestruj">
-        </div>
-        <div>
+        <ul class="sidenav blue darken-4" id="mobile-menu">
+            <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
+                haseł</a></li>
+        </ul>
+    </nav>
+    <div id="main">
+        <div class="formContainer">
+            <h4 class="center my12">Utwórz konto</h4>
+
+        <form th:action="@{/register}" method="post" id="registerForm">
+            <div class="input-field">
+                <i class="material-icons prefix">account_circle</i>
+                <input id="login" type="text"  name="login" minlength="4" maxlength="20" required th:value="${login}" autofocus>
+                <label for="login">Login</label>
+            </div>
+            <div class="input-field">
+                <i class="material-icons prefix">vpn_key</i>
+                <input id="firstPassword" class="validate" type="password" name="firstPassword" minlength="4" maxlength="20" required>
+                <label for="firstPassword">Hasło</label>
+            </div>
+            <div class="input-field">
+                <i class="material-icons prefix">subdirectory_arrow_right</i>
+                <input id="secondPassword" class="validate" type="password" name="secondPassword" minlength="4" maxlength="20" required>
+                <label for="secondPassword">Powtórz hasło</label>
+                <span id="secondPasswordHelper" class="helper-text" data-error="wrong1" data-success="OK"></span>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" class="filled-in" id="userAgreement" required />
+                    <span>Akceptuję <a href="#userAgreementModal" class="modal-trigger">regulamin korzystania z serwisu</a></span>
+                </label>
+            </div>
+            <div class="my12 center">
+                <button type="submit" class="btn waves-effect waves-light"><i class="material-icons right">input</i>Zarejestruj</button>
+            </div>
+        </form>
+        <div class="center">
             <p>Jeżeli jesteś już zarejestrowany, <a th:href="@{/login}">zaloguj się</a>.</p>
         </div>
-    </form>
+        </div>
+    </div>
 </div>
-
-<div id="userAgreement">
+<div id="userAgreementModal" class="modal modal-fixed-footer brown darken-4">
+    <div class="modal-content">
     <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus commodo odio, eu mattis risus dapibus non. Praesent lacinia auctor elit, nec auctor mi facilisis eget. Donec ullamcorper, odio dignissim varius dignissim, est odio imperdiet mauris, consequat condimentum nisi arcu dapibus arcu. Donec enim nibh, dignissim ac sapien et, cursus porttitor enim. Morbi non urna dui. Ut vitae lorem nulla. Proin rutrum eleifend justo id scelerisque. Nulla vel nibh quis turpis cursus dapibus eget quis erat. Etiam posuere pellentesque lorem, eget convallis ex condimentum ac. Quisque non augue quis mi imperdiet commodo in sed purus. Vivamus placerat id libero non imperdiet.
     </p>
@@ -61,7 +82,11 @@
     <p>
         Aliquam ac nibh varius, posuere nunc quis, pulvinar mauris. Nulla cursus enim quis placerat molestie. Nunc consectetur mi rutrum, consequat enim sed, interdum ligula. Fusce faucibus tempus turpis id placerat. Sed consequat quis dolor non gravida. Sed quis enim sed nibh aliquam convallis pellentesque ac turpis. Mauris posuere facilisis metus, id vulputate turpis lobortis sit amet. Aenean vulputate nisl sit amet volutpat ullamcorper. Aliquam porttitor arcu at purus efficitur auctor. Aenean vel tincidunt neque. Suspendisse et sollicitudin felis. Duis sed velit malesuada, accumsan sapien in, ornare est. Nullam ullamcorper faucibus metus, et vulputate libero ornare non. Sed dictum eros nec ornare malesuada. Nam id ligula placerat nisi sagittis condimentum sed a massa. Sed volutpat ligula ac porta faucibus.
     </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat"> <i class="material-icons right medium">close</i>Zamknij</a>
+    </div>
 </div>
-</body>
 <script th:src="@{/scripts/register.js}"></script>
+</body>
 </html>

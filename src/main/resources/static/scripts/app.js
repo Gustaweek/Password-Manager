@@ -26,11 +26,15 @@ function togglePasswordVisibility() {
     else
         passwordInput.type = "password";
 }
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('#mobile-menu');
-    var instances = M.Modal.init(elems);
+    var instances = M.Sidenav.init(elems, {edge: 'right', draggable: true});
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+});
 /*
 sidenav password list
 document.addEventListener('DOMContentLoaded', function() {

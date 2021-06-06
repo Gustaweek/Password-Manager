@@ -108,7 +108,7 @@ html, body{
     padding: 0!important;
 }
 div#list-pannel {
-    max-height: 90vh;
+    max-height: 85vh;
     overflow: auto;
 }
 #credentials-list ul {

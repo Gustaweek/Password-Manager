@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Password Manager</title>
+    <title>Strona główna</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link th:href="@{/styles/style.css}" rel="stylesheet">
+    <link th:href="@{/styles/materialize.css}" rel="stylesheet">
+    <script th:src="@{/scripts/materialize.js}"></script>
 </head>
-<body>
-<a th:href="@{/login}">Zaloguj</a>
+<body class="blue-grey darken-3 white-text login">
+<div class="fill">
+    <!-- menu -->
+    <nav class="blue darken-4 mb0"><!--todo: update link href-->
+        <div class="nav-wrapper">
+            <a class="brand-logo m0" th:href="${'/'}" th:text="${'Password Manager'}"></a>
+            <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+            <ul id="desktop-menu" class="right hide-on-med-and-down">
+                <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
+                </li>
+                <li><a th:href="${'/login'}"><i class="material-icons left">input</i>Zaloguj</a>
+                </li>
+            </ul>
+        </div>
+        <ul class="sidenav blue darken-4" id="mobile-menu">
+            <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
+                haseł</a></li>
+            <li class=""><a th:href="${'/login'}"><i class="material-icons left text-white">input</i>Zaloguj</a></li>
+        </ul>
+    </nav>
+    <div id="main" class="screenContainer">
+        <p class="tile">Poznaj aplikację do zarządzania hasłami. Już dziś zacznij z niej korzystać. Od tej pory nie będziesz musiał pamiętać żadnych haseł. To będzie Twój prywatny notes na hasła.</p>
+        <a class="tile" th:href="${'/login'}"><i class="material-icons left text-white">input</i>Zaloguj</a>
+        <img class="tile" id="first_screen" th:src="@{/images/dashboard_screen.png}">
+        <img class="tile" id="second_screen" th:src="@{/images/pass_gen_screen.png}">
+    </div>
+</div>
 </body>
 </html>

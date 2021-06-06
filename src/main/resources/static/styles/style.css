@@ -240,3 +240,24 @@ div#credentials-pannel {
 div#confirmDeletionModal {
     box-shadow: 0 0 10px 2px #ffffff69;
 }
+
+.tile {
+    width: 50vw;
+    margin: 30px;
+}
+
+p.tile {
+    width: 25vw;
+}
+
+#first_screen {
+    align-self: flex-end;
+}
+
+#second_screen {
+    align-self: flex-start;
+}
+
+.screenContainer {
+    flex-direction: column;
+}

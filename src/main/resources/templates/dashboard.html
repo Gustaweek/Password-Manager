@@ -82,7 +82,7 @@
     </div>
 
     <div class="col s12 m8 l9" id="credentials-pannel" th:if="${credential!=null or addCredential==true}">
-        <p th:if="${addCredential!=null && addCredential==true}">Dodaj hasło</p>
+        <p th:if="${addCredential!=null and addCredential==true}">Dodaj hasło</p>
         <form id="credential" th:action="@{/dashboard/{credentialId}(credentialId = ${credential != null ? credential.getId() : ''})}" method="post"
               th:class="${credential!=null ? 'edit' : 'add'}"><!--todo: change action path-->
             <div class="input-field"><!--todo: chhange lengths-->
@@ -113,26 +113,18 @@
 
                 </label>
             </div>
-
-            <div class="input-field note mt30">
-                <textarea id="note" name="note" class="materialize-textarea validate white-text"
-                          th:disabled="${canEdit!=true}"
-                          th:text="${credential!=null ? 'not implemented yet' : ''}"></textarea>
-                <!-- todo: default value, define maxlength-->
-                <label for="note">Notatka</label>
-            </div>
             <div th:class="'input-field center-align col s6'" th:if="${canEdit!=true}">
                 <a class="btn green waves-effect waves-light"
                    th:href="@{/dashboard/{credentialId}/edit(credentialId = ${credential.getId()})}">Edytuj
                     <i class="material-icons left">edit</i>
                 </a>
             </div>
-            <div th:class="'input-field center-align col '+ ${(canEdit==true && addCredential==true) ? 's6' : 's4'}" th:if="${canEdit==true}">
+            <div th:class="'input-field center-align col '+ ${(canEdit==true and addCredential==true) ? 's6' : 's4'}" th:if="${canEdit==true}">
                 <button class="btn green waves-effect waves-light" type="submit" name="button" value="save"><span th:text="${(addCredential!=true)? 'Zapisz' : 'Dodaj'}"></span>
                     <i class="material-icons left">cloud_done</i>
                 </button>
             </div>
-            <div th:class="'input-field center-align col '+ ${(canEdit==true && addCredential==true) ? 's6' : 's4'}" th:if="${canEdit==true}">
+            <div th:class="'input-field center-align col '+ ${(canEdit==true and addCredential==true) ? 's6' : 's4'}" th:if="${canEdit==true}">
                 <a  th:href="@{/dashboard}" class="btn orange waves-effect waves-light">Anuluj
                     <i class="material-icons left">cancel</i>
                 </a>
@@ -231,14 +223,9 @@
 </script>
 <script  th:inline="javascript" th:if="${(viewCredential == true) or (addCredential == true)}">
     /*<![CDATA[*/
-    document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
-    console.log("scroll");
-    /*]]>*/
-</script>
-<script  th:inline="javascript" th:if="${(viewCredential == true) or (addCredential == true)}">
-    /*<![CDATA[*/
     var activeCredentialId = /*[[${credential.getId()}]]*/;
     document.getElementById("credential"+activeCredentialId).scrollIntoView({behavior: "auto", block: "center"});
+    document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
     /*]]>*/
 </script>
 </body>

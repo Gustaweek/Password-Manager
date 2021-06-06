@@ -1,4 +1,4 @@
-function genetatePass(){
+function generatePass(){
     var passwordArr           = [];
     var charsLower='abcdefghijklmnopqrstuvwxyz';
     var charsUpper='ABCDEFGHIJKLMNOPQRSTUVWXYZ';

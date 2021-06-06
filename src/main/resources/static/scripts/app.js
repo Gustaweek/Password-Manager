@@ -27,6 +27,20 @@ function togglePasswordVisibility() {
         passwordInput.type = "password";
 }
 document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.modal');
+    var elems = document.querySelectorAll('#mobile-menu');
     var instances = M.Modal.init(elems);
 });
+
+/*
+sidenav password list
+document.addEventListener('DOMContentLoaded', function() {
+
+    if(!(window.innerWidth>600)) {
+        document.getElementById("credentials").classList.add("sidenav");
+        document.getElementById("credentialSideTrigger").classList.remove("hidden");
+        var elems = document.querySelectorAll('#credentials');
+        var instances = M.Sidenav.init(elems);
+    }
+});
+*/
+

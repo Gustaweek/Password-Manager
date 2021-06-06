@@ -112,13 +112,13 @@ public class DashboardController {
                                 Model model) {
 
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        credentialService.createCredential(new CredentialDto.CredentialDtoBuilder()
+        String createdId=credentialService.createCredential(new CredentialDto.CredentialDtoBuilder()
         .withUserId(user.getId())
         .withTitle(title)
         .withEmail(email)
         .withPassword(password.toCharArray())
         .build());
-
+        model.addAttribute("createdCredentialId", createdId);
         return listAllCredentials(model);
     }
 }

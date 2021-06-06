@@ -107,6 +107,10 @@ html, body{
 #credentials-list .p0{
     padding: 0!important;
 }
+div#list-pannel {
+    max-height: 90vh;
+    overflow: auto;
+}
 #credentials-list ul {
     overflow: auto;
     height: available;
@@ -148,7 +152,7 @@ div#list-pannel {
 }
  */
 .nav-wrapper {
-    max-width: 1200px;
+    max-width: 1600px;
     margin: auto;
 }
 
@@ -185,13 +189,20 @@ form input{
 }
 
 @media screen and (max-width: 640px) {
-    nav .brand-logo {
+    nav a.brand-logo {
         font-size: 5vw;
     }
     #generator #generatedPassword{
         font-size: 2vw;
     }
 }
+
+@media screen and (min-width: 992px) {
+    a.brand-logo.m0 {
+        margin-left: 12px;
+    }
+}
+
 body.dashboard div#main {
     max-width: 1600px;
 }
@@ -203,4 +214,25 @@ body.dashboard div#main {
 
 .passWithGenerator .input-field {
     flex: 1 1 auto;
+}
+
+.material-icons {
+    vertical-align: middle;
+}
+
+div#credentials-pannel {
+    margin-bottom: 80px;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 0.8em;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #9F9F9F;
+    outline: 1px solid #455a64;
 }

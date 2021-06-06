@@ -27,14 +27,19 @@ public class CredentialService {
         this.userRepository = userRepository;
     }
 
-
-    public void createCredential(CredentialDto credentialDto) {
+    /**
+     *
+     * @param credentialDto
+     * @return created credential Id
+     */
+    public String createCredential(CredentialDto credentialDto) {
         //TODO validation credentialDto
-
-        credentialRepository.save(new CredentialEntity(credentialDto.getTitle(),
+        CredentialEntity credential = new CredentialEntity(credentialDto.getTitle(),
                 credentialDto.getEmail(),
                 credentialDto.getPassword(),
-                userRepository.findById(credentialDto.getUserId()).get()));
+                userRepository.findById(credentialDto.getUserId()).get());
+        credentialRepository.save(credential);
+        return credential.getId();
     }
 
     public void updateCredential(CredentialDto credentialDto){

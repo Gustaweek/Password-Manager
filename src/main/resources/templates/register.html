@@ -7,9 +7,8 @@
     <link th:href="@{/styles/style.css}" rel="stylesheet">
     <link th:href="@{/styles/materialize.css}" rel="stylesheet">
     <script th:src="@{/scripts/materialize.js}"></script>
-    <link th:href="@{/styles/jquery-ui.min.css}" rel="stylesheet">
+    <script th:src="@{/scripts/app.js}"></script>
     <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
-    <script th:src="@{/scripts/jquery-ui.min.js}"></script>
 </head>
 <body class="blue-grey darken-3 white-text login">
 <div class="fill">
@@ -47,7 +46,7 @@
                 <i class="material-icons prefix">subdirectory_arrow_right</i>
                 <input id="secondPassword" class="validate" type="password" name="secondPassword" minlength="4" maxlength="20" required>
                 <label for="secondPassword">Powtórz hasło</label>
-                <span id="secondPasswordHelper" class="helper-text" data-error="wrong1" data-success="OK"></span>
+                <span id="secondPasswordHelper" class="helper-text" data-error="" data-success="OK"></span>
             </div>
             <div>
                 <label>
@@ -65,7 +64,7 @@
         </div>
     </div>
 </div>
-<div id="userAgreementModal" class="modal modal-fixed-footer brown darken-4">
+<div id="userAgreementModal" class="modal modal-fixed-footer grey darken-4">
     <div class="modal-content">
     <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus commodo odio, eu mattis risus dapibus non. Praesent lacinia auctor elit, nec auctor mi facilisis eget. Donec ullamcorper, odio dignissim varius dignissim, est odio imperdiet mauris, consequat condimentum nisi arcu dapibus arcu. Donec enim nibh, dignissim ac sapien et, cursus porttitor enim. Morbi non urna dui. Ut vitae lorem nulla. Proin rutrum eleifend justo id scelerisque. Nulla vel nibh quis turpis cursus dapibus eget quis erat. Etiam posuere pellentesque lorem, eget convallis ex condimentum ac. Quisque non augue quis mi imperdiet commodo in sed purus. Vivamus placerat id libero non imperdiet.
@@ -83,8 +82,8 @@
         Aliquam ac nibh varius, posuere nunc quis, pulvinar mauris. Nulla cursus enim quis placerat molestie. Nunc consectetur mi rutrum, consequat enim sed, interdum ligula. Fusce faucibus tempus turpis id placerat. Sed consequat quis dolor non gravida. Sed quis enim sed nibh aliquam convallis pellentesque ac turpis. Mauris posuere facilisis metus, id vulputate turpis lobortis sit amet. Aenean vulputate nisl sit amet volutpat ullamcorper. Aliquam porttitor arcu at purus efficitur auctor. Aenean vel tincidunt neque. Suspendisse et sollicitudin felis. Duis sed velit malesuada, accumsan sapien in, ornare est. Nullam ullamcorper faucibus metus, et vulputate libero ornare non. Sed dictum eros nec ornare malesuada. Nam id ligula placerat nisi sagittis condimentum sed a massa. Sed volutpat ligula ac porta faucibus.
     </p>
     </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat"> <i class="material-icons right medium">close</i>Zamknij</a>
+    <div class="modal-footer grey darken-4">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat white"> <i class="material-icons right medium">close</i>Zamknij</a>
     </div>
 </div>
 <script th:src="@{/scripts/register.js}"></script>

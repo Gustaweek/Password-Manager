@@ -145,15 +145,19 @@
                 </button>
             </div>
             <div th:class="'input-field center-align col '+ ${(canEdit!=true) ? 's6' : 's4'}" th:if="${addCredential!=true}">
-                <a class="btn red waves-effect waves-light" th:href="@{/dashboard/{credentialId}/delete(credentialId = ${credential.getId()})}">Usuń
+                <a  href="#confirmDeletionModal" class="modal-trigger btn red waves-effect waves-light">
+                    Usuń
+                    <i class="material-icons left">delete_forever</i>
+                </a>
+                <!--<a class="btn red waves-effect waves-light" th:href="@{/dashboard/{credentialId}/delete(credentialId = ${credential.getId()})}">Usuń
                  <i class="material-icons left">delete_forever</i>
-             </a>
+                </a>-->
          </div>
      </form>
  </div>
 
 </div>
-<div id="generatorModal" class="modal modal-fixed-footer grey  darken-4"  th:if="${canEdit==true}">
+<div id="generatorModal" class="modal modal-fixed-footer grey darken-4"  th:if="${canEdit==true}">
     <div class="modal-content">
         <div id="generator">
             <div class="center my12">
@@ -196,13 +200,29 @@
             </div>
         </div>
     </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat"> <i class="material-icons right medium">close</i>Zamknij</a>
+    <div class="modal-footer grey darken-4">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat white"> <i class="material-icons right medium">close</i>Zamknij</a>
     </div>
-</div>
+</div><!--#generatorModal-->
+
+<div id="confirmDeletionModal" class="modal grey darken-4"  th:if="${viewCredential==true}">
+    <div class="modal-content center white-text">
+        <h2 class="">Potwierdź usunięcie</h2>
+        <div class="confirmButtons">
+            <a class="btn red waves-effect" th:href="@{/dashboard/{credentialId}/delete(credentialId = ${credential.getId()})}">
+                Usuń
+                <i class="material-icons left">delete_forever</i>
+            </a>
+            <p class="modal-close blue darken-4 white-text waves-effect btn-flat"><i class="material-icons left">cancel</i>Anuluj</p>
+        </div>
+    </div><!--.modal-content-->
+</div><!--#generatorModal-->
+
+
 <script th:src="@{/scripts/app.js}"></script>
 <script th:if="${abc}">alert("krokodyl")</script>
 <script>
+    credentialsSearch.addEventListener("input", filter_credentials);
     genetatePass();
 </script>
 </body>

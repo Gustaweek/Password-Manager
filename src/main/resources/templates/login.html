@@ -39,8 +39,11 @@
             <input id="password" type="text"  name="password" required>
             <label for="username">Hasło</label>
         </div>
-        <div th:if="${loginFailed}">
-            <p th:class="error">Wprowadzono błędny login lub hasło</p>
+        <div th:if="${(param.error != null)}">
+            <script>
+                M.toast({html: 'Wprowadzono błędny login lub hasło', classes: 'red white-text'})
+            </script>
+            <!--<p th:class="error">Wprowadzono błędny login lub hasło</p>-->
         </div>
         <div class="center">
             <button type="submit" value="Zaloguj" class="btn waves-effect waves-light"><i class="material-icons right">input</i>Zaloguj</button>

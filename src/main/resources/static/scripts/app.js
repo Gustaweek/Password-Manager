@@ -2,7 +2,7 @@ const credentialsSearch = document.getElementById("credentials-search");
 const credentialsListElements = document.querySelectorAll("#credentials-list .collection li");
 const numOfResults = document.getElementById("num-of-results");
 
-credentialsSearch.addEventListener("input", filter_credentials);
+
 
 function filter_credentials(e) {
     console.log("changed");

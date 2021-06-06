@@ -47,7 +47,7 @@ public class DashboardController {
     //details of credential
     @GetMapping({"/dashboard/{credentialId}"})
     public String getSelectedCredential(@PathVariable String credentialId, Model model) {
-
+        model.addAttribute("viewCredential", true);
         model.addAttribute("credential", credentialService
                 .getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withId(credentialId).build())
                 .get());
@@ -57,7 +57,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard/{credentialId}/edit")
     public String getCredentialEditForm(@PathVariable String credentialId, Model model) {
-
+        model.addAttribute("viewCredential", true);
         model.addAttribute("canEdit", true);
 
         return getSelectedCredential(credentialId, model);

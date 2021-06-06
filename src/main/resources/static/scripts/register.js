@@ -29,3 +29,4 @@ function checkIfPasswordsAreEquivalent() {
         sPass.get(0).setCustomValidity("");
     }
 }
+

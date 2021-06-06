@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <div class="col s12 m8 l9" id="credentials-pannel" th:if="${credential!=null || addCredential==true}">
+    <div class="col s12 m8 l9" id="credentials-pannel" th:if="${credential!=null or addCredential==true}">
         <p th:if="${addCredential!=null && addCredential==true}">Dodaj hasło</p>
         <form id="credential" th:action="@{/dashboard/{credentialId}(credentialId = ${credential != null ? credential.getId() : ''})}" method="post"
               th:class="${credential!=null ? 'edit' : 'add'}"><!--todo: change action path-->
@@ -229,13 +229,13 @@
     M.toast({html: createdToastText, classes: 'green white-text', displayLength: 50000});
     /*]]>*/
 </script>
-<script  th:inline="javascript" th:if="${viewCredential || addCredential==true}">
+<script  th:inline="javascript" th:if="${(viewCredential == true) or (addCredential == true)}">
     /*<![CDATA[*/
     document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
     console.log("scroll");
     /*]]>*/
 </script>
-<script  th:inline="javascript" th:if="${viewCredential || addCredential==true}">
+<script  th:inline="javascript" th:if="${(viewCredential == true) or (addCredential == true)}">
     /*<![CDATA[*/
     var activeCredentialId = /*[[${credential.getId()}]]*/;
     document.getElementById("credential"+activeCredentialId).scrollIntoView({behavior: "auto", block: "center"});

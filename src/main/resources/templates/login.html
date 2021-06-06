@@ -27,7 +27,7 @@
 </nav>
 <div id="main">
     <div class="formContainer">
-        <h4 class="center my12">Zaluguj się</h4>
+        <h4 class="center my12">Zaloguj się</h4>
     <form th:action="@{/login}" method="post" id="loginform">
         <div class="input-field">
             <i class="material-icons prefix">account_circle</i>
@@ -36,7 +36,7 @@
         </div>
         <div class="input-field">
             <i class="material-icons prefix">vpn_key</i>
-            <input id="password" type="text"  name="password" required>
+            <input id="password" type="password"  name="password" required>
             <label for="username">Hasło</label>
         </div>
         <div th:if="${(param.error != null)}">

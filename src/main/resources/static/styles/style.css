@@ -107,8 +107,8 @@ html, body{
 #credentials-list .p0{
     padding: 0!important;
 }
-div#list-pannel {
-    max-height: 85vh;
+div#credentials-list {
+    max-height: 75vh;
     overflow: auto;
 }
 #credentials-list ul {
@@ -235,4 +235,8 @@ div#credentials-pannel {
 .custom-scroll::-webkit-scrollbar-thumb {
     background-color: #9F9F9F;
     outline: 1px solid #455a64;
+}
+
+div#confirmDeletionModal {
+    box-shadow: 0 0 10px 2px #ffffff69;
 }

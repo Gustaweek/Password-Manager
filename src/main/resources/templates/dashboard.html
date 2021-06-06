@@ -65,7 +65,7 @@
                 </div>
 
             </div>
-            <div id="credentials-list">
+            <div id="credentials-list" class=" custom-scroll">
                 <ul class="collection">
                     <li th:each="credential, iStat: ${credentials}" th:id="'credential'+${credential.getId()}"
                         th:class="'collection-item white-text p0 blue-grey my12 z-depth-2 '+${credentialId==credential.getId() ? 'darken-2 active' : 'darken-4'}">
@@ -198,7 +198,7 @@
     </div>
 </div><!--#generatorModal-->
 
-<div id="confirmDeletionModal" class="modal grey darken-4"  th:if="${viewCredential==true}">
+<div id="confirmDeletionModal" class="modal  bottom-sheet grey darken-4"  th:if="${viewCredential==true}">
     <div class="modal-content center white-text">
         <h2 class="">Potwierdź usunięcie</h2>
         <div class="confirmButtons">
@@ -233,6 +233,12 @@
     /*<![CDATA[*/
     document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
     console.log("scroll");
+    /*]]>*/
+</script>
+<script  th:inline="javascript" th:if="${viewCredential || addCredential==true}">
+    /*<![CDATA[*/
+    var activeCredentialId = /*[[${credential.getId()}]]*/;
+    document.getElementById("credential"+activeCredentialId).scrollIntoView({behavior: "auto", block: "center"});
     /*]]>*/
 </script>
 </body>

@@ -50,7 +50,7 @@
             </div>
             <div>
                 <label>
-                    <input type="checkbox" class="filled-in" id="userAgreement" required />
+                    <input type="checkbox" name="userAgreementCheckbox" class="filled-in" id="userAgreementCheckbox" required="required" />
                     <span>Akceptuję <a href="#userAgreementModal" class="modal-trigger">regulamin korzystania z serwisu</a></span>
                 </label>
             </div>
@@ -58,6 +58,9 @@
                 <button type="submit" class="btn waves-effect waves-light"><i class="material-icons right">input</i>Zarejestruj</button>
             </div>
         </form>
+        <script th:if="${loginExistsError}">
+            M.toast({html: 'Podany login już istnieje', classes: 'red white-text'})
+        </script>
         <div class="center">
             <p>Jeżeli jesteś już zarejestrowany, <a th:href="@{/login}">zaloguj się</a>.</p>
         </div>

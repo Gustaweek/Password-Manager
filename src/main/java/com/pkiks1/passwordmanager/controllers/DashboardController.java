@@ -88,7 +88,6 @@ public class DashboardController {
                                    @RequestParam(name = "title") String title,
                                    @RequestParam(name = "email") String email,
                                    @RequestParam(name = "password") String password,
-                                   @RequestParam(name = "note") String note,
                                    Model model) {
 
         credentialService.updateCredential(new CredentialDto.CredentialDtoBuilder()
@@ -109,7 +108,6 @@ public class DashboardController {
     public String addCredential(@RequestParam String title,
                                 @RequestParam String email,
                                 @RequestParam String password,
-                                @RequestParam String note,
                                 Model model) {
 
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

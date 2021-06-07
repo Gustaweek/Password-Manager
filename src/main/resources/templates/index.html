@@ -7,8 +7,9 @@
     <link th:href="@{/styles/style.css}" rel="stylesheet">
     <link th:href="@{/styles/materialize.css}" rel="stylesheet">
     <script th:src="@{/scripts/materialize.js}"></script>
+    <script th:src="@{/scripts/app.js}"></script>
 </head>
-<body class="blue-grey darken-3 white-text login">
+<body class="blue-grey darken-3 white-text index">
 <div class="fill">
     <!-- menu -->
     <nav class="blue darken-4 mb0"><!--todo: update link href-->
@@ -25,14 +26,24 @@
         <ul class="sidenav blue darken-4" id="mobile-menu">
             <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
                 haseł</a></li>
-            <li class=""><a th:href="${'/login'}"><i class="material-icons left text-white">input</i>Zaloguj</a></li>
+            <li class=""><a th:href="${'/login'}" class="white-text"><i class="material-icons left white-text">input</i>Zaloguj</a></li>
         </ul>
     </nav>
-    <div id="main" class="screenContainer">
-        <p class="tile">Poznaj aplikację do zarządzania hasłami. Już dziś zacznij z niej korzystać. Od tej pory nie będziesz musiał pamiętać żadnych haseł. To będzie Twój prywatny notes na hasła.</p>
-        <a class="tile" th:href="${'/login'}"><i class="material-icons left text-white">input</i>Zaloguj</a>
-        <img class="tile" id="first_screen" th:src="@{/images/dashboard_screen.png}">
-        <img class="tile" id="second_screen" th:src="@{/images/pass_gen_screen.png}">
+    <div id="main" class="container">
+        <div class="screenContainer">
+            <div class="screenContainerLabel">
+                <p>Poznaj aplikację do zarządzania hasłami. Już dziś zacznij z niej korzystać. Od tej pory nie będziesz musiał pamiętać żadnych haseł. To będzie Twój prywatny notes na hasła.</p>
+                <a class="btn" th:href="${'/login'}"><i class="material-icons left text-white">input</i>Zaloguj</a>
+                <a class="btn" th:href="${'/register'}"><i class="material-icons left text-white">edit</i>Rejestracja</a>
+            </div>
+            <img class="tile" id="first_screen" th:src="@{/images/dashboard_screen.png}">
+        </div>
+        <div class="screenContainer reverse">
+            <img class="tile" id="second_screen" th:src="@{/images/pass_gen_screen.png}">
+            <div class="screenContainerLabel">
+                <p>Nawet nie musisz się rejestrować żeby wygenerować hasło, jednak aby je nie musieć pamiętać, bo jednak jest to losowy ciag znaków, warto zalożyć konto i autmatycznie przypisać wygenerowane hasło do twojego konta.</p>
+                <a class="btn" th:href="${'/password-generator'}"><i class="material-icons left text-white">vpn_key</i>Generator haseł</a>
+            </div>
     </div>
 </div>
 </body>

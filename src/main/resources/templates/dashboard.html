@@ -185,7 +185,7 @@
         </div>
     </div>
     <div class="modal-footer grey darken-4">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat white"> <i class="material-icons right medium">close</i>Zamknij</a>
+        <a href="#" class="modal-close waves-effect waves-green btn-flat white"> <i class="material-icons right medium">close</i>Zamknij</a>
     </div>
 </div><!--#generatorModal-->
 
@@ -221,10 +221,15 @@
     M.toast({html: createdToastText, classes: 'green white-text', displayLength: 50000});
     /*]]>*/
 </script>
-<script  th:inline="javascript" th:if="${(viewCredential == true) or (addCredential == true)}">
+<script th:inline="javascript" th:if="${(viewCredential == true)}">
     /*<![CDATA[*/
     var activeCredentialId = /*[[${credential.getId()}]]*/;
     document.getElementById("credential"+activeCredentialId).scrollIntoView({behavior: "auto", block: "center"});
+    document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
+    /*]]>*/
+</script>
+<script th:inline="javascript" th:if="${(addCredential == true)}">
+    /*<![CDATA[*/
     document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
     /*]]>*/
 </script>

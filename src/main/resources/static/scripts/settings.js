@@ -8,6 +8,7 @@ function openingPasswords(){
     document.getElementById("newPasswordSecond").required = true;
 }
 function closingPasswords(){
+    document.getElementById("changePassword").checked=false;
     document.getElementById("changePassword").removeAttribute("checked");
     document.getElementById("newPassword").removeAttribute("required");
     document.getElementById("newPasswordSecond").removeAttribute("required");

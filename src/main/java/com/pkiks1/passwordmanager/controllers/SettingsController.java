@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.security.auth.login.CredentialException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/settings")
@@ -22,22 +23,27 @@ public class SettingsController {
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("userId", user.getId());
         return "settings";
     }
 
     @PostMapping
-    public String editUser(@RequestParam(name = "username") String username,
+    public String editUser(
+            @RequestParam(value = "changePassword", required= false, defaultValue = "false") boolean changePassword,
+                           @RequestParam(name = "userId") String userId,
+                           @RequestParam(name = "username") String username,
                            @RequestParam(name = "currentPassword") char[] firstPassword,
                            @RequestParam(name = "newPassword") char[] newPassword,
                            @RequestParam(name = "newPasswordSecond") char[] newPasswordSecond,
+                           @RequestParam Map<String,String> allParams,
                            Model model) {
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("passedParams",  allParams.entrySet());
 
-
-        if(username.equals(user.getUsername()))
+        if(userId.equals(user.getId()))
         {
             //todo check current password, update password
-
+            //wybrano zmiane hasla jeśli changePassword="on"
             model.addAttribute("error", false);
         }
         else
@@ -46,6 +52,7 @@ public class SettingsController {
         }
 
         model.addAttribute("username", user.getUsername());
+        model.addAttribute("userId", user.getId());
         return "settings";
     }
 

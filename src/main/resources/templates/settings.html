@@ -8,6 +8,7 @@
   <link th:href="@{/styles/materialize.css}" rel="stylesheet">
   <script th:src="@{/scripts/materialize.js}"></script>
   <script th:src="@{/scripts/app.js}"></script>
+  <script th:src="@{/scripts/settings.js}"></script>
   <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
 </head>
 <body class="blue-grey darken-3 white-text settings">
@@ -32,28 +33,50 @@
     </ul>
   </nav>
   <div id="main">
-    <div class="formContainer">
-      <h4 class="center my12" th:text="'Edytuj konto '+${username}"></h4>
 
+    <div class="formContainer">
+      <h4 class="center my12" th:text="'Edytuj konto '"></h4>
+  <p th:text="${'passed params</br>'+passedParams}"></p>
       <form th:action="@{/settings}" method="post" id="editAccountForm" class="my20">
-        <input type="hidden" name="username" id="username" th:value="${username}">
+        <input type="hidden" name="userId" id="userId" th:value="${userId}">
+        <div class="input-field">
+          <i class="material-icons prefix">person_outline</i>
+          <input id="username" class="validate" type="text" name="username" th:data-old="${username}" minlength="4" maxlength="20" required th:value="${username}">
+          <label for="currentPassword">Nazwa użytkownika</label>
+        </div>
         <div class="input-field">
           <i class="material-icons prefix">vpn_key</i>
           <input id="currentPassword" class="validate" type="password" name="currentPassword" minlength="4" maxlength="20" required autocomplete="current-password">
           <label for="currentPassword">Obecne hasło</label>
         </div>
-        <div class="input-field">
-          <i class="material-icons prefix">vpn_key</i>
-          <input id="newPassword" class="validate" type="password" name="newPassword" minlength="4" maxlength="20" required autocomplete="new-password">
-          <label for="newPassword">Nowe hasło</label>
-          <!--<span id="newPasswordHelper" class="helper-text"></span>-->
-        </div>
-        <div class="input-field">
-          <i class="material-icons prefix">subdirectory_arrow_right</i>
-          <input id="newPasswordSecond" class="validate" type="password" name="newPasswordSecond" minlength="4" maxlength="20" required autocomplete="new-password">
-          <label for="newPasswordSecond">Powtórz nowe hasło</label>
-          <!--<span id="newPasswordSecondHelper" class="helper-text"></span>-->
-        </div>
+        <input type="checkbox" id="changePassword" name="changePassword">
+        <ul class="collapsible popout not-list transparent" id="newPasswords">
+          <li class="active-switch">
+            <div class="collapsible-header waves-effect waves-light transparent">
+             <span class="hide-on-active"><i class="material-icons">arrow_drop_down</i>Zmień hasło</span>
+              <span class="show-on-active"><i class="material-icons">arrow_drop_up</i>Nie zmieniaj hasła</span>
+            </div>
+            <div class="collapsible-body">
+              <div class="input-field">
+                <i class="material-icons prefix">vpn_key</i>
+                <input id="newPassword" class="validate" type="password" name="newPassword" minlength="4" maxlength="20" autocomplete="new-password">
+                <label for="newPassword">Nowe hasło</label>
+                <!--<span id="newPasswordHelper" class="helper-text"></span>
+                todo: fronted password validator
+                -->
+              </div>
+              <div class="input-field">
+                <i class="material-icons prefix">subdirectory_arrow_right</i>
+                <input id="newPasswordSecond" class="validate" type="password" name="newPasswordSecond" minlength="4" maxlength="20" autocomplete="new-password">
+                <label for="newPasswordSecond">Powtórz nowe hasło</label>
+                <!--<span id="newPasswordSecondHelper" class="helper-text"></span>-->
+              </div>
+
+            </div>
+          </li>
+
+        </ul>
+
         <div class="my12 center">
           <button type="submit" class="btn waves-effect waves-light"><i class="material-icons right">save</i>Zapisz</button>
         </div>

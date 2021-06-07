@@ -271,3 +271,22 @@ p.tile {
     height: fit-content;
 }
 
+div#newPasswords .collapsible-header {
+    background: transparent;
+}
+
+.not-list{
+    list-style:none;
+}
+/*active switch*/
+.active-switch.active .hide-on-active {
+    display: none;
+}
+
+.active-switch.active .show-on-active {
+    display: block;
+}
+
+.active-switch .show-on-active {
+    display: none;
+}

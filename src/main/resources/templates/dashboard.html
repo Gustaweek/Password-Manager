@@ -19,11 +19,10 @@
         <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
         <ul id="desktop-menu" class="right hide-on-med-and-down">
 
-            <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
-            </li>
-            <li><a th:href="${'#/settings'}"><i class="material-icons left">settings</i>Ustawienia</a></li>
+            <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
+            <li><a th:href="${'/settings'}"><i class="material-icons left">settings</i>Ustawienia</a></li>
             <li><a th:href="${'/dashboard/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
-            <li><a th:href="@{/logout}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+            <li><a th:href="@{'/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
         </ul>
     </div>
     <ul class="sidenav blue darken-4" id="mobile-menu">
@@ -43,7 +42,7 @@
 
 <!-- menu end -->
 <!--add button-->
-<div class="fixed-action-btn">
+<div class="fixed-action-btn" id="floatingAddButton">
     <a th:href="${'/dashboard/add'}" class="btn-floating btn-large green">
         <i class="large material-icons waves-effect">add_circle_outline</i>
     </a>
@@ -54,7 +53,7 @@
 <div class="row" id="main">
     <div class="col s12 m4 l3 custom-scroll" id="list-pannel">
 
-        <div id="credentials" class="blue-grey darken-3">
+        <div id="credentials" class="blue-grey darken-3" th:if="${credentialsSize>0}">
             <div class="credentials-searcher">
                 <div class="input-field">
                     <i class="material-icons prefix">search</i>
@@ -156,8 +155,8 @@
 
             <div>
                 <p class="range-field">
-                    Długość hasła
-                    <input type="range" id="genLength" min="4" max="50"  value="12" step="1"  oninput="generatePass();" onchange="generatePass();"/>
+                    <label for="genLength">Długość hasła</label>
+                    <input type="range" id="genLength" name="genLength" min="4" max="50"  value="12" step="1"  oninput="generatePass();" onchange="generatePass();"/>
                 </p>
             </div>
 
@@ -186,7 +185,7 @@
         </div>
     </div>
     <div class="modal-footer grey darken-4">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat white"> <i class="material-icons right medium">close</i>Zamknij</a>
+        <a href="#" class="modal-close waves-effect waves-green btn-flat white"> <i class="material-icons right medium">close</i>Zamknij</a>
     </div>
 </div><!--#generatorModal-->
 
@@ -204,8 +203,9 @@
 </div><!--#confirmDeletionModal-->
 
 
+
+
 <script th:src="@{/scripts/app.js}"></script>
-<script th:if="${abc}">alert("krokodyl")</script>
 <script>
     credentialsSearch.addEventListener("input", filter_credentials);
 </script>
@@ -221,12 +221,34 @@
     M.toast({html: createdToastText, classes: 'green white-text', displayLength: 50000});
     /*]]>*/
 </script>
-<script  th:inline="javascript" th:if="${(viewCredential == true) or (addCredential == true)}">
+<script th:inline="javascript" th:if="${(viewCredential == true)}">
     /*<![CDATA[*/
     var activeCredentialId = /*[[${credential.getId()}]]*/;
     document.getElementById("credential"+activeCredentialId).scrollIntoView({behavior: "auto", block: "center"});
     document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
     /*]]>*/
 </script>
+<script th:inline="javascript" th:if="${(addCredential == true)}">
+    /*<![CDATA[*/
+    document.getElementById("credentials-pannel").scrollIntoView({behavior: "smooth", block: "start"});
+    /*]]>*/
+</script>
+
+<div class="tap-target green white-text" id="discover-floatingAddButton" data-target="floatingAddButton" th:if="${discoverFeatures==true}">
+    <div class="tap-target-content">
+        <h2>Dodaj hasło</h2>
+        <p>Kliknij w przycisk, aby utworzyć pierwsze hasło</p>
+    </div>
+    <script>
+        M.TapTarget.init(document.getElementById("floatingAddButtonDiscover"));
+        var elems = document.querySelectorAll(".tap-target");
+        if(elems.length>0)
+        {
+            var instances = M.TapTarget.init(elems);
+            if(instances.length>0)
+            instances[0].open();
+        }
+    </script>
+</div>
 </body>
 </html>

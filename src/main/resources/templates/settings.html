@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Ustawienia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link th:href="@{/styles/style.css}" rel="stylesheet">
+  <link th:href="@{/styles/materialize.css}" rel="stylesheet">
+  <script th:src="@{/scripts/materialize.js}"></script>
+  <script th:src="@{/scripts/app.js}"></script>
+  <script th:src="@{/scripts/settings.js}"></script>
+  <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
+</head>
+<body class="blue-grey darken-3 white-text settings">
+<div class="fill">
+  <!-- menu -->
+  <nav class="blue darken-4 mb0">
+    <div class="nav-wrapper">
+      <a class="brand-logo m0" th:href="${'/'}" th:text="${'Password Manager'}"></a>
+      <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+      <ul id="desktop-menu" class="right hide-on-med-and-down">
+        <li><a th:href="${'/dashboard'}"><i class="material-icons left">dashboard</i>Moje hasła</a></li>
+        <li><a th:href="${'/dashboard/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
+        <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
+        <li><a th:href="@{'/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+      </ul>
+    </div>
+    <ul class="sidenav blue darken-4" id="mobile-menu">
+      <li><a th:href="${'/dashboard'}"><i class="material-icons left">dashboard</i>Moje hasła</a></li>
+      <li><a th:href="${'/dashboard/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
+      <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
+      <li><a th:href="@{'/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+    </ul>
+  </nav>
+  <div id="main">
+
+    <div class="formContainer">
+      <h4 class="center my12" th:text="'Edytuj konto '"></h4>
+  <p th:text="${'passed params</br>'+passedParams}"></p>
+      <form th:action="@{/settings}" method="post" id="editAccountForm" class="my20">
+        <input type="hidden" name="userId" id="userId" th:value="${userId}">
+        <div class="input-field">
+          <i class="material-icons prefix">person_outline</i>
+          <input id="username" class="validate" type="text" name="username" th:data-old="${username}" minlength="4" maxlength="20" required th:value="${username}">
+          <label for="currentPassword">Nazwa użytkownika</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">vpn_key</i>
+          <input id="currentPassword" class="validate" type="password" name="currentPassword" minlength="4" maxlength="20" required autocomplete="current-password">
+          <label for="currentPassword">Obecne hasło</label>
+        </div>
+        <input type="checkbox" id="changePassword" name="changePassword">
+        <ul class="collapsible popout not-list transparent" id="newPasswords">
+          <li class="active-switch">
+            <div class="collapsible-header waves-effect waves-light transparent">
+             <span class="hide-on-active"><i class="material-icons">arrow_drop_down</i>Zmień hasło</span>
+              <span class="show-on-active"><i class="material-icons">arrow_drop_up</i>Nie zmieniaj hasła</span>
+            </div>
+            <div class="collapsible-body">
+              <div class="input-field">
+                <i class="material-icons prefix">vpn_key</i>
+                <input id="newPassword" class="validate" type="password" name="newPassword" minlength="4" maxlength="20" autocomplete="new-password">
+                <label for="newPassword">Nowe hasło</label>
+                <!--<span id="newPasswordHelper" class="helper-text"></span>
+                todo: fronted password validator
+                -->
+              </div>
+              <div class="input-field">
+                <i class="material-icons prefix">subdirectory_arrow_right</i>
+                <input id="newPasswordSecond" class="validate" type="password" name="newPasswordSecond" minlength="4" maxlength="20" autocomplete="new-password">
+                <label for="newPasswordSecond">Powtórz nowe hasło</label>
+                <!--<span id="newPasswordSecondHelper" class="helper-text"></span>-->
+              </div>
+
+            </div>
+          </li>
+
+        </ul>
+
+        <div class="my12 center">
+          <button type="submit" class="btn waves-effect waves-light"><i class="material-icons right">save</i>Zapisz</button>
+        </div>
+      </form>
+      <script th:if="${param.error}">
+          M.toast({html: 'Wprowadzono błędny obecne hasło', classes: 'red white-text'})
+      </script>
+    </div>
+  </div>
+</div>
+<script th:src="@{/scripts/register.js}"></script>
+</body>
+</html>

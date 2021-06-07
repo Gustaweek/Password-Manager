@@ -41,6 +41,7 @@ public class DashboardController {
                 .getPrincipal();
 
         model.addAttribute("credentials", credentialService.getAllCredentialsForUserId(user.getId()));
+        model.addAttribute("credentialsSize", credentialService.getAllCredentialsForUserId(user.getId()).size());
         return "dashboard";
     }
 

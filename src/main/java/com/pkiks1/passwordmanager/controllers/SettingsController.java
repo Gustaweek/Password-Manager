@@ -18,6 +18,13 @@ import java.util.Map;
 @RequestMapping("/settings")
 public class SettingsController {
 
+    private final UserService userService;
+
+    @Autowired
+    public SettingsController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping
     public String getSettings(Model model) {
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -42,9 +49,19 @@ public class SettingsController {
 
         if(userId.equals(user.getId()))
         {
-            //todo check current password, update password
-            //wybrano zmiane hasla jeśli changePassword="on"
-            model.addAttribute("error", false);
+            if (!changePassword) {
+                  userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
+                  return "logout";
+            }
+            try{
+                userService.updateUserWithPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
+                model.addAttribute("error", false);
+                return "logout";
+            } catch (CredentialException e) {
+                model.addAttribute("incorrectData", true);
+                return "settings";
+            }
+
         }
         else
         {

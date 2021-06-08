@@ -1,16 +1,12 @@
 package com.pkiks1.passwordmanager.controllers;
 
 import com.pkiks1.passwordmanager.dto.CredentialDto;
-import com.pkiks1.passwordmanager.dto.UserDto;
 import com.pkiks1.passwordmanager.security.PasswordManagerUser;
 import com.pkiks1.passwordmanager.services.CredentialService;
 import com.pkiks1.passwordmanager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,10 +45,18 @@ public class DashboardController {
     @GetMapping({"/dashboard/{credentialId}"})
     public String getSelectedCredential(@PathVariable String credentialId, Model model) {
         model.addAttribute("viewCredential", true);
-        model.addAttribute("credential", credentialService
-                .getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withId(credentialId).build())
-                .get());
 
+        try {
+            CredentialDto credential = credentialService
+                    .getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withId(credentialId).build())
+                    .get();
+            model.addAttribute("credential", credential);
+            return listAllCredentials(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CredentialDto credential = new CredentialDto.CredentialDtoBuilder().withId("CREDENTIAL-GET-ERROR").build();
+        model.addAttribute("credential", credential);
         return listAllCredentials(model);
     }
 
@@ -90,17 +94,24 @@ public class DashboardController {
                                    @RequestParam(name = "password") String password,
                                    Model model) {
 
-        credentialService.updateCredential(new CredentialDto.CredentialDtoBuilder()
-                .withId(credentialId)
-                .withTitle(title)
-                .withEmail(email)
-                .withPassword(password.toCharArray())
-                .build());
+        try {
+            credentialService.updateCredential(new CredentialDto.CredentialDtoBuilder()
+                    .withId(credentialId)
+                    .withTitle(title)
+                    .withEmail(email)
+                    .withPassword(password.toCharArray())
+                    .build());
 
-        model.addAttribute("credential", credentialService
-                .getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withId(credentialId).build())
-                .get());
+            model.addAttribute("credential", credentialService
+                    .getCredentialForUser(new CredentialDto.CredentialDtoBuilder().withId(credentialId).build())
+                    .get());
 
+            return listAllCredentials(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        CredentialDto credential = new CredentialDto.CredentialDtoBuilder().withId("CREDENTIAL-UPDATE-ERROR").build();
+        model.addAttribute("credential", credential);
         return listAllCredentials(model);
     }
 
@@ -111,12 +122,19 @@ public class DashboardController {
                                 Model model) {
 
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String createdId=credentialService.createCredential(new CredentialDto.CredentialDtoBuilder()
-        .withUserId(user.getId())
-        .withTitle(title)
-        .withEmail(email)
-        .withPassword(password.toCharArray())
-        .build());
+        try {
+            String createdId=credentialService.createCredential(new CredentialDto.CredentialDtoBuilder()
+                    .withUserId(user.getId())
+                    .withTitle(title)
+                    .withEmail(email)
+                    .withPassword(password.toCharArray())
+                    .build());
+            model.addAttribute("createdCredentialId", createdId);
+            return listAllCredentials(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String createdId = "CREDENTIAL-CREATION-ERROR";
         model.addAttribute("createdCredentialId", createdId);
         return listAllCredentials(model);
     }

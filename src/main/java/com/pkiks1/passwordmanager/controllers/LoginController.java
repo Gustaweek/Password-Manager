@@ -25,7 +25,7 @@ public class LoginController {
     public String getLoginPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            return "dashboard";
+            return "redirect:dashboard";
         }
         return "login";
     }

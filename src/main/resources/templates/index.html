@@ -19,14 +19,14 @@
             <ul id="desktop-menu" class="right hide-on-med-and-down">
                 <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
                 </li>
-                <li><a th:href="${'/login'}"><i class="material-icons left">input</i>Zaloguj</a>
+                <li><a th:href="${'/login'}" th:utext="'<i class=\'material-icons left white-text\'>input</i>' + ${loggedIn == true ? 'Moje hasła' : 'Zaloguj'}"></a>
                 </li>
             </ul>
         </div>
         <ul class="sidenav blue darken-4" id="mobile-menu">
             <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
                 haseł</a></li>
-            <li class=""><a th:href="${'/login'}" class="white-text"><i class="material-icons left white-text">input</i>Zaloguj</a></li>
+            <li class=""><a th:href="${'/login'}" class="white-text" th:utext="'<i class=\'material-icons left white-text\'>input</i>' + ${loggedIn == true ? 'Moje hasła' : 'Zaloguj'}"></a></li>
         </ul>
     </nav>
     <div id="main" class="container">

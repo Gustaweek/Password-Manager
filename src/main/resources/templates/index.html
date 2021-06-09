@@ -14,27 +14,31 @@
     <!-- menu -->
     <nav class="blue darken-4 mb0"><!--todo: update link href-->
         <div class="nav-wrapper">
-            <a class="brand-logo m0" th:href="${'/'}" th:text="${'Password Manager'}"></a>
+            <a class="brand-logo m0" th:href="@{/}" th:text="${'Password Manager'}"></a>
             <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
             <ul id="desktop-menu" class="right hide-on-med-and-down">
-                <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
+                <li><a th:href="@{/password-generator}"><i class="material-icons left">vpn_key</i>Generator haseł</a>
                 </li>
-                <li><a th:href="${'/login'}" th:utext="'<i class=\'material-icons left white-text\'>input</i>' + ${loggedIn == true ? 'Moje hasła' : 'Zaloguj'}"></a>
-                </li>
+                <li th:if="${loggedIn}" class=""><a th:href="@{/dashboard}" class="white-text"><i class="material-icons left white-text">dashboard</i> Moje hasła</a></li>
+                <li th:if="${loggedIn}"><a onclick="document.getElementById('logoutForm').submit();"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+                <li th:if="${loggedIn == null}" class=""><a th:href="@{/login}" class="white-text"><i class="material-icons left white-text">input</i> Zaloguj</a></li>
+                <form id="logoutForm" th:action="@{/logout}" method="post"></form>
             </ul>
         </div>
         <ul class="sidenav blue darken-4" id="mobile-menu">
-            <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
+            <li class=""><a th:href="@{/password-generator}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
                 haseł</a></li>
-            <li class=""><a th:href="${'/login'}" class="white-text" th:utext="'<i class=\'material-icons left white-text\'>input</i>' + ${loggedIn == true ? 'Moje hasła' : 'Zaloguj'}"></a></li>
+            <li th:if="${loggedIn}" class=""><a th:href="@{/dashboard}" class="white-text"><i class="material-icons left white-text">dashboard</i> Moje hasła</a></li>
+            <li th:if="${loggedIn}"><a onclick="document.getElementById('logoutForm').submit();" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a></li>
+            <li th:if="${loggedIn == null}" class=""><a th:href="@{/login}" class="white-text"><i class="material-icons left white-text">input</i> Zaloguj</a></li>
         </ul>
     </nav>
     <div id="main" class="container">
         <div class="screenContainer">
             <div class="screenContainerLabel">
                 <p>Poznaj aplikację do zarządzania hasłami. Już dziś zacznij z niej korzystać. Od tej pory nie będziesz musiał pamiętać żadnych haseł. To będzie Twój prywatny notes na hasła.</p>
-                <a class="btn" th:href="${'/login'}"><i class="material-icons left text-white">input</i>Zaloguj</a>
-                <a class="btn" th:href="${'/register'}"><i class="material-icons left text-white">edit</i>Rejestracja</a>
+                <a class="btn" th:href="@{/login}"><i class="material-icons left text-white">input</i>Zaloguj</a>
+                <a class="btn" th:href="@{/register}"><i class="material-icons left text-white">edit</i>Rejestracja</a>
             </div>
             <img class="tile" id="first_screen" th:src="@{/images/dashboard_screen.png}">
         </div>
@@ -42,7 +46,7 @@
             <img class="tile" id="second_screen" th:src="@{/images/pass_gen_screen.png}">
             <div class="screenContainerLabel">
                 <p>Nawet nie musisz się rejestrować żeby wygenerować hasło, jednak aby je nie musieć pamiętać, bo jednak jest to losowy ciag znaków, warto zalożyć konto i autmatycznie przypisać wygenerowane hasło do twojego konta.</p>
-                <a class="btn" th:href="${'/password-generator'}"><i class="material-icons left text-white">vpn_key</i>Generator haseł</a>
+                <a class="btn" th:href="@{/password-generator}"><i class="material-icons left text-white">vpn_key</i>Generator haseł</a>
             </div>
     </div>
 </div>

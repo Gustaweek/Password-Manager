@@ -16,33 +16,33 @@
   <!-- menu -->
   <nav class="blue darken-4 mb0">
     <div class="nav-wrapper">
-      <a class="brand-logo m0" th:href="${'/'}" th:text="${'Password Manager'}"></a>
+      <a class="brand-logo m0" th:href="@{/}" th:text="${'Password Manager'}"></a>
       <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
       <ul id="desktop-menu" class="right hide-on-med-and-down">
-        <li><a th:href="${'/dashboard'}"><i class="material-icons left">dashboard</i>Moje hasła</a></li>
-        <li><a th:href="${'/dashboard/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
-        <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
-        <li><a th:href="@{'/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+        <li><a th:href="@{/dashboard}"><i class="material-icons left">dashboard</i>Moje hasła</a></li>
+        <li><a th:href="@{/dashboard/add}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
+        <li><a th:href="@{/password-generator}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
+        <li><a onclick="document.getElementById('logoutForm').submit();"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+        <form id="logoutForm" th:action="@{/logout}" method="post"></form>
       </ul>
     </div>
     <ul class="sidenav blue darken-4" id="mobile-menu">
-      <li><a th:href="${'/dashboard'}"><i class="material-icons left">dashboard</i>Moje hasła</a></li>
-      <li><a th:href="${'/dashboard/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
-      <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
-      <li><a th:href="@{'/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+      <li><a class="white-text" th:href="@{/dashboard}"><i class="material-icons left white-text">dashboard</i>Moje hasła</a></li>
+      <li><a class="white-text" th:href="@{/dashboard/add}"><i class="material-icons left white-text">add_circle_outline</i>Dodaj</a></li>
+      <li><a class="white-text" th:href="@{/password-generator}"><i class="material-icons left white-text">vpn_key</i>Generator haseł</a></li>
+      <li><a onclick="document.getElementById('logoutForm').submit();" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a></li>
     </ul>
   </nav>
   <div id="main">
 
     <div class="formContainer">
       <h4 class="center my12" th:text="'Edytuj konto '"></h4>
-  <p th:text="${'passed params</br>'+passedParams}"></p>
       <form th:action="@{/settings}" method="post" id="editAccountForm" class="my20">
         <input type="hidden" name="userId" id="userId" th:value="${userId}">
         <div class="input-field">
           <i class="material-icons prefix">person_outline</i>
           <input id="username" class="validate" type="text" name="username" th:data-old="${username}" minlength="4" maxlength="20" required th:value="${username}">
-          <label for="currentPassword">Nazwa użytkownika</label>
+          <label for="username">Nazwa użytkownika</label>
         </div>
         <div class="input-field">
           <i class="material-icons prefix">vpn_key</i>
@@ -78,11 +78,14 @@
         </ul>
 
         <div class="my12 center">
-          <button type="submit" class="btn waves-effect waves-light"><i class="material-icons right">save</i>Zapisz</button>
+          <button form="editAccountForm" type="submit" class="btn waves-effect waves-light"><i class="material-icons right">save</i>Zapisz</button>
         </div>
       </form>
-      <script th:if="${param.error}">
-          M.toast({html: 'Wprowadzono błędny obecne hasło', classes: 'red white-text'})
+      <script th:if="${incorrectData == true}">
+          M.toast({html: 'Wprowadzono błędne obecne hasło', classes: 'red white-text'})
+      </script>
+      <script th:if="${error == true}">
+          M.toast({html: 'Wystąpił błąd', classes: 'red white-text'})
       </script>
     </div>
   </div>

@@ -51,12 +51,12 @@ public class SettingsController {
         {
             if (!changePassword) {
                   userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
-                  return "logout";
+                  return "logout-form";
             }
             try{
                 userService.updateUserWithPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
                 model.addAttribute("error", false);
-                return "logout";
+                return "logout-form";
             } catch (CredentialException e) {
                 model.addAttribute("incorrectData", true);
                 return "settings";
@@ -65,7 +65,7 @@ public class SettingsController {
         }
         else
         {
-            model.addAttribute("error", "Wystąpił błąd");//zalogowano na inne konto lub zmieniono username w ukrytym input
+            model.addAttribute("error", true);//zalogowano na inne konto lub zmieniono username w ukrytym input
         }
 
         model.addAttribute("username", user.getUsername());

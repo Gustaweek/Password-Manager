@@ -83,13 +83,27 @@ public class UserService {
                 userRepository.save(userEntity);
                 return true;
             }
-        }else{
-            UserEntity userEntity = userEntityOptional.get();
-            userEntity.setPassword(passwordEncoder.encode(new String(firstPassword)).toCharArray());
-            userRepository.save(userEntity);
-            return true;
         }
 
+        return false;
+    }
+    public boolean updateUserPassword (String id, String login,  char[] oldPassword,
+                                           char[] firstPassword, char[] secondPassword) throws CredentialException {
+
+        if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
+                || (firstPassword.length < 4 || firstPassword.length > 20)) {
+            throw new CredentialException("Incorrect data");
+        }
+        Optional<UserEntity> userEntityOptional;
+        userEntityOptional = userRepository.findById(id);
+        if (userEntityOptional.get().getLogin().equals(login)){
+            if(passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))){
+                UserEntity userEntity = userEntityOptional.get();
+                userEntity.setPassword(passwordEncoder.encode(new String(firstPassword)).toCharArray());
+                userRepository.save(userEntity);
+                return true;
+            }
+        }
         return false;
     }
 

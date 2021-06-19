@@ -50,17 +50,42 @@ public class SettingsController {
         if(userId.equals(user.getId()))
         {
             if (!changePassword) {
-                  userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
-                  return "logout-form";
+                  boolean updateComplete = userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
+                  if(updateComplete){
+                      return "logout-form";
+                  }else{
+                      model.addAttribute("incorrectUserName", true);
+                      return "settings";
+                  }
             }
-            try{
-                userService.updateUserWithPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
-                model.addAttribute("error", false);
-                return "logout-form";
-            } catch (CredentialException e) {
-                model.addAttribute("incorrectData", true);
-                return "settings";
+            if(username.equals(user.getUsername())){
+                try {
+                    userService.updateUserPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
+                    model.addAttribute("error", false);
+                    return "logout-form";
+                } catch (CredentialException e) {
+                    model.addAttribute("incorrectUserName", true);
+                    return "settings";
+
+                }
+            }else{
+                try{
+                    boolean updateComplete = userService.updateUserWithPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
+                    if(updateComplete){
+                        model.addAttribute("error", false);
+                        return "logout-form";
+
+                    }else{
+                        model.addAttribute("incorrectUserName", true);
+                        return "settings";
+                    }
+                } catch (CredentialException e) {
+                    model.addAttribute("incorrectData", true);
+                    return "settings";
+                }
             }
+
+
 
         }
         else

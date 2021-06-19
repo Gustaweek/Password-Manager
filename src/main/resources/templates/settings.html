@@ -84,6 +84,9 @@
       <script th:if="${incorrectData == true}">
           M.toast({html: 'Wprowadzono błędne obecne hasło', classes: 'red white-text'})
       </script>
+      <script th:if="${incorrectUserName == true}">
+        M.toast({html: 'Wprowadzona nazwa użytkownika jest już zajęta', classes: 'red white-text'})
+      </script>
       <script th:if="${error == true}">
           M.toast({html: 'Wystąpił błąd', classes: 'red white-text'})
       </script>

@@ -49,7 +49,10 @@ public class UserService {
         }
         return false;
     }
-    public boolean updateUserWithoutPassword (String id, String login, char[] password){
+    public boolean updateUserWithoutPassword (String id, String login, char[] password) throws CredentialException {
+        if ((login.length() < 4 || login.length() > 20)) {
+            throw new CredentialException("Incorrect Login");
+        }
         Optional<UserEntity> userEntityOptional;
         userEntityOptional = userRepository.findById(id);
         Optional<UserEntity> userEntityOptionalByLogin = userRepository.findUserEntityByLogin(login);

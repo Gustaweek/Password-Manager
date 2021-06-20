@@ -17,8 +17,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -52,7 +51,6 @@ class UserServiceTest {
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity.get());
         when(passwordEncoder.encode(anyString())).thenReturn(String.valueOf(password));
 
-        userService.registerUser(userName,password, password);
 
         assertTrue(userService.registerUser(userName, password, password));
 
@@ -85,6 +83,7 @@ class UserServiceTest {
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
+
     @Test
     void registerUserTooShortPassword() {
         String userName = "testLogin";
@@ -100,7 +99,83 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUserWithoutPassword() {
+    void updateUserWithoutPasswordHappyPath() throws CredentialException {
+
+        String userName = "testLogin";
+        char[] password = "testofpassword".toCharArray();
+
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+
+        String finalUserName= "testLoginFinal";
+        String id= userEntity.get().getId();
+        char[] passwordToCheck = "testofpassword".toCharArray();
+
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+        when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity.get());
+
+
+
+        assertTrue(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        assertEquals(finalUserName, userEntity.get().getLogin());
+    }
+
+    @Test
+    void updateUserWithoutPasswordTooShortLogin() {
+        String userName = "testLogin";
+        char[] password = "testofpassword".toCharArray();
+
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+
+        String finalUserName= "tes";
+        String id= userEntity.get().getId();
+        char[] passwordToCheck = "testofpassword".toCharArray();
+
+        Exception exception = Assertions.assertThrows(CredentialException.class, () -> {
+            userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck);
+        });
+        String expectedMessage = "Incorrect Login";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void updateUserWithoutPasswordLoginExists() throws CredentialException {
+
+        String userName = "testLogin";
+        char[] password = "testofpassword".toCharArray();
+
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+
+        String finalUserName= "testLogin";
+        String id= userEntity.get().getId();
+        char[] passwordToCheck = "testofpassword".toCharArray();
+
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+        when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
+
+        assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+    }
+
+    @Test
+    void updateUserWithoutPasswordWrongPasswordToCheck() throws CredentialException {
+
+        String userName = "testLogin";
+        char[] password = "testofpassword".toCharArray();
+
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+
+        String finalUserName= "testLoginFinal";
+        String id= userEntity.get().getId();
+        char[] passwordToCheck = "testofpa".toCharArray();
+
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+        when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
+
+        assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
     }
 
     @Test

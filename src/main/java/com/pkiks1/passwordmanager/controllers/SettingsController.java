@@ -50,8 +50,15 @@ public class SettingsController {
         if(userId.equals(user.getId()))
         {
             if (!changePassword) {
-                  boolean updateComplete = userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
-                  if(updateComplete){
+                boolean updateComplete = false;
+                try {
+                    updateComplete = userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
+
+                } catch (CredentialException e) {
+                    model.addAttribute("incorrectLogin", true);
+                    return "settings";
+                }
+                if(updateComplete){
                       return "logout-form";
                   }else{
                       model.addAttribute("incorrectUserName", true);

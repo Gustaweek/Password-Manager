@@ -179,6 +179,22 @@ class UserServiceTest {
     }
 
     @Test
+    void updateUserWithoutPasswordWrongId() throws CredentialException {
+        String userName = "testLogin";
+        char[] password = "testofpassword".toCharArray();
+
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+
+        String finalUserName= "testLoginFinal";
+        String id= "asdasdassdas";
+        char[] passwordToCheck = "testofpassword".toCharArray();
+
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+
+        assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+    }
+
+    @Test
     void updateUserWithPassword() {
     }
 

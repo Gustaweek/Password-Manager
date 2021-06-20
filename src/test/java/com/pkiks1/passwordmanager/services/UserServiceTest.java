@@ -59,7 +59,7 @@ class UserServiceTest {
     }
 
     @Test
-    void registerUserToShortLogin() {
+    void registerUserTooShortLogin() {
         String userName = "tes";
         char[] password = "testofpassword".toCharArray();
 
@@ -86,7 +86,7 @@ class UserServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
     @Test
-    void registerUserToShortPassword() {
+    void registerUserTooShortPassword() {
         String userName = "testLogin";
         char[] passwordOne = "tes".toCharArray();
         char[] passwordTwo = "tes".toCharArray();

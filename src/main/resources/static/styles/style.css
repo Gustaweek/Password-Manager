@@ -247,6 +247,7 @@ div#confirmDeletionModal {
 
 .tile {
     width: 50vw;
+    max-width: 800px;
     margin: 30px;
 }
 

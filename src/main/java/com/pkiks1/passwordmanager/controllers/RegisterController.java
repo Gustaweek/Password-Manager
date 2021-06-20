@@ -35,7 +35,6 @@ public class RegisterController {
 
         try {
             if (userService.registerUser(login, firstPassword, secondPassword)) {
-                model.addAttribute("discoverFeatures", true);
                 return "redirect:dashboard";
             }
         } catch (CredentialException e) {

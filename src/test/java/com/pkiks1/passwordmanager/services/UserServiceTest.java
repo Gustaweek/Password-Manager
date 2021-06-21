@@ -2,28 +2,25 @@ package com.pkiks1.passwordmanager.services;
 
 import com.pkiks1.passwordmanager.domain.UserEntity;
 import com.pkiks1.passwordmanager.repositories.UserRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.security.auth.login.CredentialException;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @Autowired
+    @InjectMocks
     private UserService userService;
 
     @Mock
@@ -32,192 +29,190 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
-
-        userService = new UserService(userRepository, passwordEncoder);
-    }
-
     @Test
-    void registerUserHappyPath() throws CredentialException {
-
+    void registerUserHappyPath() {
+        // given
         String userName = "testLogin";
         char[] password = "testofpassword".toCharArray();
-
         Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
 
+        // when
         when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity.get());
         when(passwordEncoder.encode(anyString())).thenReturn(String.valueOf(password));
 
-
-        assertTrue(userService.registerUser(userName, password, password));
+        // then
+        try {
+            assertTrue(userService.registerUser(userName, password, password));
+        } catch (Exception ex) {
+            fail("Unexpected exception");
+        }
 
     }
 
     @Test
-    void registerUserTooShortLogin() {
+    void registerUserLoginTooShort() {
+        // given
         String userName = "tes";
         char[] password = "testofpassword".toCharArray();
-
-        Exception exception = Assertions.assertThrows(CredentialException.class, () -> {
-            userService.registerUser(userName,password, password);
-        });
         String expectedMessage = "Incorrect data";
-        String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        // when
+        Exception exception = assertThrows(CredentialException.class,
+                () -> userService.registerUser(userName, password, password));
+
+        // then
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
     void registerUserWrongSecondPassword() {
+        // given
         String userName = "testLogin";
         char[] passwordOne = "testofpassword".toCharArray();
         char[] passwordTwo = "testofpass".toCharArray();
-        Exception exception = Assertions.assertThrows(CredentialException.class, () -> {
-            userService.registerUser(userName,passwordOne, passwordTwo);
-        });
         String expectedMessage = "Incorrect data";
-        String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        // when
+        Exception exception = assertThrows(CredentialException.class,
+                () -> userService.registerUser(userName,passwordOne, passwordTwo));
+
+        // then
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
-    void registerUserTooShortPassword() {
+    void registerUserPasswordTooShort() {
+        // given
         String userName = "testLogin";
         char[] passwordOne = "tes".toCharArray();
         char[] passwordTwo = "tes".toCharArray();
-        Exception exception = Assertions.assertThrows(CredentialException.class, () -> {
-            userService.registerUser(userName,passwordOne, passwordTwo);
-        });
         String expectedMessage = "Incorrect data";
-        String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        // when
+        Exception exception = assertThrows(CredentialException.class,
+                () -> userService.registerUser(userName,passwordOne, passwordTwo));
+
+        // then
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
-    void updateUserWithoutPasswordHappyPath() throws CredentialException {
-
+    void updateUserWithoutPasswordHappyPath() {
+        // given
         String userName = "testLogin";
-        char[] password = "testofpassword".toCharArray();
-
-        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
-
         String finalUserName= "testLoginFinal";
-        String id= userEntity.get().getId();
+        char[] password = "testofpassword".toCharArray();
         char[] passwordToCheck = "testofpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+        String id= userEntity.get().getId();
 
+        // when
         when(userRepository.findById(anyString())).thenReturn(userEntity);
         when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity.get());
 
-
-
-        assertTrue(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        // then
+        try {
+            assertTrue(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        } catch (Exception e) {
+            fail("Unexpected exception");
+        }
         assertEquals(finalUserName, userEntity.get().getLogin());
     }
 
     @Test
-    void updateUserWithoutPasswordTooShortLogin() {
+    void updateUserWithoutPasswordLoginTooShort() {
+        // given
         String userName = "testLogin";
-        char[] password = "testofpassword".toCharArray();
-
-        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
-
         String finalUserName= "tes";
-        String id= userEntity.get().getId();
-        char[] passwordToCheck = "testofpassword".toCharArray();
-
-        Exception exception = Assertions.assertThrows(CredentialException.class, () -> {
-            userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck);
-        });
         String expectedMessage = "Incorrect Login";
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
-    @Test
-    void updateUserWithoutPasswordLoginExists() throws CredentialException {
-
-        String userName = "testLogin";
         char[] password = "testofpassword".toCharArray();
-
-        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
-
-        String finalUserName= "testLogin";
-        String id= userEntity.get().getId();
         char[] passwordToCheck = "testofpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+        String id= userEntity.get().getId();
 
-        when(userRepository.findById(anyString())).thenReturn(userEntity);
-        when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
+        // when
+        Exception exception = assertThrows(CredentialException.class,
+                () -> userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
 
-        assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        // then
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
-    void updateUserWithoutPasswordWrongPasswordToCheck() throws CredentialException {
-
+    void updateUserWithoutPasswordLoginExists() {
+        // given
         String userName = "testLogin";
+        String finalUserName= "testLogin";
         char[] password = "testofpassword".toCharArray();
-
+        char[] passwordToCheck = "testofpassword".toCharArray();
         Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
-
-        String finalUserName= "testLoginFinal";
         String id= userEntity.get().getId();
-        char[] passwordToCheck = "testofpa".toCharArray();
 
+        // when
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+        when(userRepository.findUserEntityByLogin(anyString())).thenReturn(userEntity);
+
+        // then
+        try {
+            assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        } catch (Exception e) {
+            fail("Unexpected exception");
+        }
+    }
+
+    @Test
+    void updateUserWithoutPasswordWrongPasswordToCheck() {
+        // given
+        String userName = "testLogin";
+        String finalUserName= "testLoginFinal";
+        char[] passwordToCheck = "testofpa".toCharArray();
+        char[] password = "testofpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+        String id= userEntity.get().getId();
+
+        // when
         when(userRepository.findById(anyString())).thenReturn(userEntity);
         when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
-        assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        // then
+        try {
+            assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
+        } catch (Exception e) {
+            fail("Unexpected exception");
+        }
     }
 
     @Test
-    void updateUserWithoutPasswordWrongId() throws CredentialException {
+    void updateUserWithPasswordHappyPath() {
+        // given
         String userName = "testLogin";
-        char[] password = "testofpassword".toCharArray();
-
-        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
-
         String finalUserName= "testLoginFinal";
-        String id= "asdasdassdas";
-        char[] passwordToCheck = "testofpassword".toCharArray();
-
-        when(userRepository.findById(anyString())).thenReturn(userEntity);
-
-        assertFalse(userService.updateUserWithoutPassword(id,finalUserName,passwordToCheck));
-    }
-
-    @Test
-    void updateUserWithPasswordHappyPath() throws CredentialException {
-
-        String userName = "testLogin";
         char[] password = "testofpassword".toCharArray();
-
-        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
-
-        String finalUserName= "testLoginFinal";
-        String id= userEntity.get().getId();
         char[] passwordToCheck = "testofpassword".toCharArray();
-
         char[] newPasswordOne = "testofnewpassword".toCharArray();
         char[] newPasswordTwo = "testofnewpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+        String id= userEntity.get().getId();
 
-
+        // when
         when(userRepository.findById(anyString())).thenReturn(userEntity);
         when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-        when(passwordEncoder.encode(anyString())).thenReturn(String.valueOf(password));
+        when(passwordEncoder.encode(anyString())).thenReturn(String.valueOf(newPasswordOne));
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity.get());
 
-        assertTrue(userService.updateUserWithPassword(id,finalUserName,passwordToCheck,newPasswordOne,newPasswordTwo));
-
+        // then
+        try {
+            assertTrue(userService.updateUserWithPassword(id,finalUserName,passwordToCheck,newPasswordOne,newPasswordTwo));
+        } catch (Exception e) {
+            fail("Unexpected exception");
+        }
+        assertEquals(finalUserName, userEntity.get().getLogin());
+        assertEquals(String.valueOf(newPasswordOne), String.valueOf(userEntity.get().getPassword()));
     }
 
     @Test

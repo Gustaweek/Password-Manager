@@ -195,10 +195,32 @@ class UserServiceTest {
     }
 
     @Test
-    void updateUserWithPassword() {
+    void updateUserWithPasswordHappyPath() throws CredentialException {
+
+        String userName = "testLogin";
+        char[] password = "testofpassword".toCharArray();
+
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, password));
+
+        String finalUserName= "testLoginFinal";
+        String id= userEntity.get().getId();
+        char[] passwordToCheck = "testofpassword".toCharArray();
+
+        char[] newPasswordOne = "testofnewpassword".toCharArray();
+        char[] newPasswordTwo = "testofnewpassword".toCharArray();
+
+
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+        when(userRepository.findUserEntityByLogin(anyString())).thenReturn(Optional.empty());
+        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+        when(passwordEncoder.encode(anyString())).thenReturn(String.valueOf(password));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity.get());
+
+        assertTrue(userService.updateUserWithPassword(id,finalUserName,passwordToCheck,newPasswordOne,newPasswordTwo));
+
     }
 
     @Test
-    void updateUserPassword() {
+    void updateUserPasswordHappyPath() {
     }
 }

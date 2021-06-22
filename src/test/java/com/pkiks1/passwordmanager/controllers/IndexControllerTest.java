@@ -9,7 +9,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -22,9 +21,8 @@ class IndexControllerTest {
 
     @Test
     @WithUserDetails("testUser")
-    void getIndex() throws Exception {
+    void test_getIndex() throws Exception {
         this.mockMvc.perform(get("/index"))
-                .andDo(log())
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
     }

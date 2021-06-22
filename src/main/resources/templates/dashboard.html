@@ -86,21 +86,21 @@
         <form id="credential" th:action="@{/dashboard/{credentialId}(credentialId = ${credential != null ? credential.getId() : ''})}" method="post"
               th:class="${credential!=null ? 'edit' : 'add'}"><!--todo: change action path-->
             <div class="input-field"><!--todo: chhange lengths-->
-                <input required id="title" type="text" class="validate white-text" name="title" minlength="4" maxlength="30"
+                <input required id="title" type="text" class="validate white-text" name="title" minlength="4" maxlength="50"
                        th:value="${credential!=null ? credential.getTitle() : ''}"
                        th:disabled="${canEdit!=true}"><!-- todo: define maxlength-->
                 <label for="title">Tytuł</label>
             </div>
 
             <div class="input-field">
-                <input id="email" required type="email" class="validate white-text" name="email" th:disabled="${canEdit!=true}"  minlength="4" maxlength="30"
+                <input id="email" required type="email" class="validate white-text" name="email" th:disabled="${canEdit!=true}"  minlength="4" maxlength="50"
                        th:value="${credential!=null ? credential.getEmail() : ''}"><!-- todo: define maxlength-->
                 <label for="email">E-mail</label>
             </div>
             <div class="mb20">
                 <div class="mb0 passWithGenerator">
                     <div class="input-field">
-                    <input required id="password" type="password" name="password" class="toggleMe validate white-text" minlength="4" maxlength="30"
+                    <input required id="password" type="password" name="password" class="toggleMe validate white-text" minlength="4" maxlength="50"
                            th:disabled="${canEdit!=true}"
                            th:value="${credential!=null ? credential.getPasswordString() : ''}"><!-- todo: define maxlength-->
                     <label for="password">Hasło</label>

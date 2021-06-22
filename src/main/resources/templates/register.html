@@ -61,6 +61,9 @@
         <script th:if="${loginExistsError}">
             M.toast({html: 'Podany login już istnieje', classes: 'red white-text'})
         </script>
+            <script th:if="${incorrectData}">
+                M.toast({html: 'Podano nieprawidłowe dane', classes: 'red white-text'})
+            </script>
         <div class="center">
             <p>Jeżeli jesteś już zarejestrowany, <a th:href="@{/login}">zaloguj się</a>.</p>
         </div>

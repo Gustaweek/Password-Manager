@@ -21,6 +21,10 @@ sPass.on("input",function () {
 }*/
 
 function checkIfPasswordsAreEquivalent() {
+    if (fPass.val().length < 4) {
+        document.getElementById("secondPasswordHelper").dataset.error="Podane hasło jest za krótkie";
+    }
+
     if(fPass.val() !== sPass.val()) {
         sPass.get(0).setCustomValidity("Podane hasła są różne");
         document.getElementById("secondPasswordHelper").dataset.error="Podane hasła są różne";

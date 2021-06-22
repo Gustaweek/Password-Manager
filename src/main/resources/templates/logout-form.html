@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wylogowywanie</title>
+
+    <script th:src="@{/scripts/jquery-3.6.0.min.js}"></script>
+</head>
+<body>
+
+  <form id="logoutFormSettings" th:action="@{/logout}" method="post"></form>
+
+  <script>
+    $(document).ready(function () {
+      $("#logoutFormSettings").submit();
+    });
+  </script>
+
+</body>
+</html>

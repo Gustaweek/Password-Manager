@@ -18,6 +18,13 @@ import java.util.Map;
 @RequestMapping("/settings")
 public class SettingsController {
 
+    private final UserService userService;
+
+    @Autowired
+    public SettingsController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping
     public String getSettings(Model model) {
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -42,13 +49,48 @@ public class SettingsController {
 
         if(userId.equals(user.getId()))
         {
-            //todo check current password, update password
-            //wybrano zmiane hasla jeśli changePassword="on"
-            model.addAttribute("error", false);
+            if (!changePassword) {
+                  boolean updateComplete = userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
+                  if(updateComplete){
+                      return "logout-form";
+                  }else{
+                      model.addAttribute("incorrectUserName", true);
+                      return "settings";
+                  }
+            }
+            if(username.equals(user.getUsername())){
+                try {
+                    userService.updateUserPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
+                    model.addAttribute("error", false);
+                    return "logout-form";
+                } catch (CredentialException e) {
+                    model.addAttribute("incorrectUserName", true);
+                    return "settings";
+
+                }
+            }else{
+                try{
+                    boolean updateComplete = userService.updateUserWithPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
+                    if(updateComplete){
+                        model.addAttribute("error", false);
+                        return "logout-form";
+
+                    }else{
+                        model.addAttribute("incorrectUserName", true);
+                        return "settings";
+                    }
+                } catch (CredentialException e) {
+                    model.addAttribute("incorrectData", true);
+                    return "settings";
+                }
+            }
+
+
+
         }
         else
         {
-            model.addAttribute("error", "Wystąpił błąd");//zalogowano na inne konto lub zmieniono username w ukrytym input
+            model.addAttribute("error", true);//zalogowano na inne konto lub zmieniono username w ukrytym input
         }
 
         model.addAttribute("username", user.getUsername());

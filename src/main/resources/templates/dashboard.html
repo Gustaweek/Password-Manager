@@ -15,27 +15,28 @@
 <!-- menu -->
 <nav class="blue darken-4 mb20"><!--todo: update link href-->
     <div class="nav-wrapper">
-        <a class="brand-logo m0" th:href="${'/dashboard'}" th:text="${'Moje hasła'}"></a>
+        <a class="brand-logo m0" th:href="@{/}" th:text="${'Password Manager'}"></a>
         <a href="#" data-target="mobile-menu" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
         <ul id="desktop-menu" class="right hide-on-med-and-down">
 
-            <li><a th:href="${'/password-generator'}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
-            <li><a th:href="${'/settings'}"><i class="material-icons left">settings</i>Ustawienia</a></li>
-            <li><a th:href="${'/dashboard/add'}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
-            <li><a th:href="@{'/logout'}"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+            <li><a th:href="@{/password-generator}"><i class="material-icons left">vpn_key</i>Generator haseł</a></li>
+            <li><a th:href="@{/settings}"><i class="material-icons left">settings</i>Ustawienia</a></li>
+            <li><a th:href="@{/dashboard/add}"><i class="material-icons left">add_circle_outline</i>Dodaj</a></li>
+            <li><a onclick="document.getElementById('logoutForm').submit();"><i class="material-icons left">highlight_off</i>Wyloguj</a></li>
+            <form id="logoutForm" th:action="@{/logout}" method="post"></form>
         </ul>
     </div>
     <ul class="sidenav blue darken-4" id="mobile-menu">
         <li class="blue darken-3 white-text">
             <div class="user-view"><!--todo: update user variables-->
-                <span class="white-text name" th:text="${'Login ' + login}"></span>
-                <span class="white-text email" th:text="${'Mail ' + credentialId}"></span>
+                <span class="white-text name" th:text="${'Login: ' + user.getUsername()}"></span>
             </div>
-            <a th:href="@{/logout}" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a>
+            <a onclick="document.getElementById('logoutForm').submit();" class="white-text"><i class="material-icons left white-text">highlight_off</i>Wyloguj</a>
         </li>
-        <li class=""><a th:href="${'/password-generator'}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
+        <li><a th:href="@{/dashboard/add}" class="white-text"><i class="material-icons left white-text">add_circle_outline</i>Dodaj</a></li>
+        <li class=""><a th:href="@{/password-generator}" class="white-text"><i class="material-icons white-text">vpn_key</i>Generator
             haseł</a></li>
-        <li class=""><a th:href="${'/settings'}" class="white-text"><i class="material-icons white-text">settings</i>Ustawienia</a>
+        <li class=""><a th:href="@{/settings}" class="white-text"><i class="material-icons white-text">settings</i>Ustawienia</a>
         </li>
     </ul>
 </nav>
@@ -43,7 +44,7 @@
 <!-- menu end -->
 <!--add button-->
 <div class="fixed-action-btn" id="floatingAddButton">
-    <a th:href="${'/dashboard/add'}" class="btn-floating btn-large green">
+    <a th:href="@{/dashboard/add}" class="btn-floating btn-large green">
         <i class="large material-icons waves-effect">add_circle_outline</i>
     </a>
 </div>
@@ -234,7 +235,7 @@
     /*]]>*/
 </script>
 
-<div class="tap-target green white-text" id="discover-floatingAddButton" data-target="floatingAddButton" th:if="${discoverFeatures==true}">
+<div class="tap-target green white-text" id="discover-floatingAddButton" data-target="floatingAddButton" th:if="${(credentialsSize == 0) and (!(addCredential == true))}">
     <div class="tap-target-content">
         <h2>Dodaj hasło</h2>
         <p>Kliknij w przycisk, aby utworzyć pierwsze hasło</p>

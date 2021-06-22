@@ -7,6 +7,7 @@
     <link th:href="@{/styles/style.css}" rel="stylesheet">
     <link th:href="@{/styles/materialize.css}" rel="stylesheet">
     <script th:src="@{/scripts/materialize.js}"></script>
+    <script th:src="@{/scripts/app.js}"></script>
 </head>
 <body class="blue-grey darken-3 white-text login">
 <div class="fill">
@@ -37,7 +38,7 @@
         <div class="input-field">
             <i class="material-icons prefix">vpn_key</i>
             <input id="password" type="password"  name="password" required>
-            <label for="username">Hasło</label>
+            <label for="password">Hasło</label>
         </div>
         <div th:if="${(param.error != null)}">
             <script>

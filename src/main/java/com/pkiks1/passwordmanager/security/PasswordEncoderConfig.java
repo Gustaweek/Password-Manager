@@ -12,4 +12,7 @@ public class PasswordEncoderConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public AESCipher aesCipher() { return new AESCipher(); }
 }

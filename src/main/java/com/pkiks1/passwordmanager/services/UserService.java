@@ -47,7 +47,64 @@ public class UserService {
             createUser(login, firstPassword);
             return true;
         }
+        return false;
+    }
+    public boolean updateUserWithoutPassword (String id, String login, char[] password){
+        Optional<UserEntity> userEntityOptional;
+        userEntityOptional = userRepository.findById(id);
+        Optional<UserEntity> userEntityOptionalByLogin = userRepository.findUserEntityByLogin(login);
+        if (userEntityOptionalByLogin.isEmpty() && !userEntityOptional.get().getLogin().equals(login)) {
+            if(passwordEncoder.matches(String.valueOf(password),String.valueOf(userEntityOptional.get().getPassword()))){
+                UserEntity userEntity = userEntityOptional.get();
+                userEntity.setLogin(login);
+                userRepository.save(userEntity);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateUserWithPassword (String id, String login, char[] oldPassword,
+                                           char[] firstPassword, char[] secondPassword) throws CredentialException {
+
+        if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
+                || (login.length() < 4 || login.length() > 20)
+                || (firstPassword.length < 4 || firstPassword.length > 20)) {
+            throw new CredentialException("Incorrect data");
+        }
+        Optional<UserEntity> userEntityOptional;
+        userEntityOptional = userRepository.findById(id);
+        Optional<UserEntity> userEntityOptionalByLogin = userRepository.findUserEntityByLogin(login);
+        if (userEntityOptionalByLogin.isEmpty() && !userEntityOptional.get().getLogin().equals(login)) {
+            if(passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))){
+                UserEntity userEntity = userEntityOptional.get();
+                userEntity.setLogin(login);
+                userEntity.setPassword(passwordEncoder.encode(new String(firstPassword)).toCharArray());
+                userRepository.save(userEntity);
+                return true;
+            }
+        }
 
         return false;
     }
+    public boolean updateUserPassword (String id, String login,  char[] oldPassword,
+                                           char[] firstPassword, char[] secondPassword) throws CredentialException {
+
+        if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
+                || (firstPassword.length < 4 || firstPassword.length > 20)) {
+            throw new CredentialException("Incorrect data");
+        }
+        Optional<UserEntity> userEntityOptional;
+        userEntityOptional = userRepository.findById(id);
+        if (userEntityOptional.get().getLogin().equals(login)){
+            if(passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))){
+                UserEntity userEntity = userEntityOptional.get();
+                userEntity.setPassword(passwordEncoder.encode(new String(firstPassword)).toCharArray());
+                userRepository.save(userEntity);
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -247,11 +247,8 @@ div#confirmDeletionModal {
 
 .tile {
     width: 50vw;
+    max-width: 800px;
     margin: 30px;
-}
-
-p.tile {
-    width: 25vw;
 }
 
 #first_screen {
@@ -263,8 +260,42 @@ p.tile {
 }
 
 .screenContainer {
-    flex-direction: column;
+    display: flex;
 }
+.screenContainerLabel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+body.index #main {
+    flex-direction: column;
+    width: 90%;
+}
+
+body.index .btn {
+    margin: 10px auto;
+}
+
+@media screen and (max-width: 640px) {
+    .screenContainer {
+        flex-direction: column;
+    }
+
+    .tile {
+        width: 100%;
+        margin: 4px;
+    }
+
+    .reverse .tile {
+        order: 1;
+    }
+}
+
+body.index {
+    line-height: 1.6;
+}
+
 /*Feature discover*/
 .fixed-action-btn.tap-target-origin {
     width: fit-content;

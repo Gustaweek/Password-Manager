@@ -4,12 +4,13 @@ package com.pkiks1.passwordmanager.services;
 import com.pkiks1.passwordmanager.domain.CredentialEntity;
 import com.pkiks1.passwordmanager.domain.UserEntity;
 import com.pkiks1.passwordmanager.dto.CredentialDto;
-import com.pkiks1.passwordmanager.dto.UserDto;
 import com.pkiks1.passwordmanager.repositories.CredentialRepository;
 import com.pkiks1.passwordmanager.repositories.UserRepository;
+import com.pkiks1.passwordmanager.security.AESCipher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +21,16 @@ public class CredentialService {
 
     private final CredentialRepository credentialRepository;
     private final UserRepository userRepository;
+    private final AESCipher cipher;
+
+    private final String cipherKey = "XKaPdRgUkXp2s5v8";
+    private final String cipherVector = "encryptionIntVec";
 
     @Autowired
-    public CredentialService(CredentialRepository credentialRepository, UserRepository userRepository) {
+    public CredentialService(CredentialRepository credentialRepository, UserRepository userRepository, AESCipher cipher) {
         this.credentialRepository = credentialRepository;
         this.userRepository = userRepository;
+        this.cipher = cipher;
     }
 
     /**
@@ -32,24 +38,33 @@ public class CredentialService {
      * @param credentialDto
      * @return created credential Id
      */
-    public String createCredential(CredentialDto credentialDto) {
+    public String createCredential(CredentialDto credentialDto) throws Exception{
         //TODO validation credentialDto
+        byte[] encryptedPasswordBytes = cipher.encryptMessage(String.valueOf(credentialDto.getPassword()).getBytes(),
+                        cipherKey.getBytes(),
+                        cipherVector.getBytes());
+        String encryptedPassword = new String(Base64.getEncoder().encode(encryptedPasswordBytes),"UTF-8");
+
         CredentialEntity credential = new CredentialEntity(credentialDto.getTitle(),
                 credentialDto.getEmail(),
-                credentialDto.getPassword(),
+                encryptedPassword.toCharArray(),
                 userRepository.findById(credentialDto.getUserId()).get());
         credentialRepository.save(credential);
         return credential.getId();
     }
 
-    public void updateCredential(CredentialDto credentialDto){
+    public void updateCredential(CredentialDto credentialDto) throws Exception {
         Optional<CredentialEntity> optionalCredentialEntity;
         optionalCredentialEntity = credentialRepository.findById(credentialDto.getId());
-        if(optionalCredentialEntity.isPresent()){
+        if (optionalCredentialEntity.isPresent()) {
+            byte[] encryptedPasswordBytes = cipher.encryptMessage(String.valueOf(credentialDto.getPassword()).getBytes(),
+                            cipherKey.getBytes(),
+                            cipherVector.getBytes());
+            String encryptedPassword = new String(Base64.getEncoder().encode(encryptedPasswordBytes),"UTF-8");
             CredentialEntity credentialEntity = optionalCredentialEntity.get();
             credentialEntity.setTitle(credentialDto.getTitle());
             credentialEntity.setEmail(credentialDto.getEmail());
-            credentialEntity.setPassword(credentialDto.getPassword());
+            credentialEntity.setPassword(encryptedPassword.toCharArray());
             credentialRepository.save(credentialEntity);
         }
     }
@@ -77,17 +92,23 @@ public class CredentialService {
         return credentialDtos;
     }
 
-    public Optional<CredentialDto> getCredentialForUser(CredentialDto credentialDto) {
+    public Optional<CredentialDto> getCredentialForUser(CredentialDto credentialDto) throws Exception {
 
         Optional<CredentialEntity> optionalCredential;
         optionalCredential = credentialRepository.findById(credentialDto.getId());
 
         if (optionalCredential.isPresent()) {
+            byte[] encryptedPasswordBytes = String.valueOf(optionalCredential.get().getPassword()).getBytes();
+            byte[] decodedEncryptedPasswordBytes = Base64.getDecoder().decode(encryptedPasswordBytes);
+            byte[] decryptedPasswordBytes = cipher.decryptMessage(decodedEncryptedPasswordBytes,
+                            cipherKey.getBytes(),
+                            cipherVector.getBytes());
+            String decryptedPassword = new String(decryptedPasswordBytes, "UTF-8");
             credentialDto = new CredentialDto.CredentialDtoBuilder()
                     .withId(optionalCredential.get().getId())
                     .withTitle(optionalCredential.get().getTitle())
                     .withEmail(optionalCredential.get().getEmail())
-                    .withPassword(optionalCredential.get().getPassword())
+                    .withPassword(decryptedPassword.toCharArray())
                     .build();
         } else {
             credentialDto = null;

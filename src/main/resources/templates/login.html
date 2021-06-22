@@ -57,5 +57,10 @@
     </div>
 </div>
 </div>
+
+<script th:if="${successfulRegister}">
+    M.toast({html: 'Pomyślnie utworzono konto', classes: 'green white-text'})
+</script>
+
 </body>
 </html>

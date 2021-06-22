@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.security.auth.login.CredentialException;
 
@@ -31,11 +32,13 @@ public class RegisterController {
     public String registerUser(@RequestParam(name = "login") String login,
                                @RequestParam(name = "firstPassword") char[] firstPassword,
                                @RequestParam(name = "secondPassword") char[] secondPassword,
-                               Model model) {
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
 
         try {
             if (userService.registerUser(login, firstPassword, secondPassword)) {
-                return "redirect:dashboard";
+                redirectAttributes.addFlashAttribute("successfulRegister", true);
+                return "redirect:login";
             }
         } catch (CredentialException e) {
             model.addAttribute("incorrectData", true);

@@ -38,7 +38,8 @@ public class UserService {
     public boolean registerUser(String login, char[] firstPassword, char[] secondPassword) throws CredentialException {
         if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
         || (login.length() < 4 || login.length() > 20)
-        || (firstPassword.length < 4 || firstPassword.length > 20)) {
+        || (firstPassword.length < 4 || firstPassword.length > 20)
+        || (!login.trim().equals(login) || !String.valueOf(firstPassword).trim().equals(String.valueOf(firstPassword)))) {
             throw new CredentialException("Incorrect data");
         }
 

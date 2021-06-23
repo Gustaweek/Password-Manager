@@ -114,7 +114,6 @@ public class UserService {
             return false;
         }
         throw new CredentialException();
-
     }
 
 }

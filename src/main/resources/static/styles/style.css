@@ -321,3 +321,18 @@ div#newPasswords .collapsible-header {
 .active-switch .show-on-active {
     display: none;
 }
+/*password generator length slider*/
+input#genLength{
+    margin-top:14px;
+    margin:bottom:14px;
+}
+input#genLength::-webkit-slider-runnable-track {
+    height: 10px;
+}
+input#genLength::-webkit-slider-thumb {
+    border: 1px solid black;
+    height: 36px;
+    width: 16px;
+    border-radius: 0px;
+    margin-top: -13px;
+}

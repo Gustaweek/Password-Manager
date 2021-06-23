@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.security.auth.login.CredentialException;
+import javax.security.auth.login.CredentialNotFoundException;
+import javax.security.auth.login.LoginException;
 import java.util.Map;
 
 @Controller
@@ -37,43 +40,42 @@ public class SettingsController {
     @PostMapping
     public String editUser(
             @RequestParam(value = "changePassword", required= false, defaultValue = "false") boolean changePassword,
-                           @RequestParam(name = "userId") String userId,
-                           @RequestParam(name = "username") String username,
-                           @RequestParam(name = "currentPassword") char[] firstPassword,
-                           @RequestParam(name = "newPassword") char[] newPassword,
-                           @RequestParam(name = "newPasswordSecond") char[] newPasswordSecond,
-                           @RequestParam Map<String,String> allParams,
-                           Model model) {
+            @RequestParam(name = "userId") String userId,
+            @RequestParam(name = "username") String username,
+            @RequestParam(name = "currentPassword") char[] firstPassword,
+            @RequestParam(name = "newPassword") char[] newPassword,
+            @RequestParam(name = "newPasswordSecond") char[] newPasswordSecond,
+            @RequestParam Map<String,String> allParams,
+            Model model) {
         PasswordManagerUser user = (PasswordManagerUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("passedParams",  allParams.entrySet());
 
         if(userId.equals(user.getId()))
         {
             if (!changePassword) {
-                boolean updateComplete = false;
-                try {
-                    updateComplete = userService.updateUserWithoutPassword(user.getId(),username,firstPassword);
 
+                try {
+                    boolean updateComplete = userService.updateUserWithoutPassword(user.getId(), username, firstPassword);
+                    if (updateComplete) {
+                        return "logout-form";
+                    } else {
+                        model.addAttribute("incorrectUserName", true);
+                        return getSettings(model);
+                    }
                 } catch (CredentialException e) {
-                    model.addAttribute("incorrectLogin", true);
-                    return "settings";
+                    model.addAttribute("incorrectData", true);
+                    return getSettings(model);
                 }
-                if(updateComplete){
-                      return "logout-form";
-                  }else{
-                      model.addAttribute("incorrectUserName", true);
-                      return "settings";
-                  }
             }
             if(username.equals(user.getUsername())){
                 try {
-                    userService.updateUserPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond);
-                    model.addAttribute("error", false);
-                    return "logout-form";
+                    if (!userService.updateUserPassword(user.getId(),username,firstPassword,newPassword,newPasswordSecond)) {
+                        model.addAttribute("error", true);
+                        return getSettings(model);
+                    }
                 } catch (CredentialException e) {
-                    model.addAttribute("incorrectUserName", true);
-                    return "settings";
-
+                    model.addAttribute("incorrectData", true);
+                    return getSettings(model);
                 }
             }else{
                 try{
@@ -83,12 +85,15 @@ public class SettingsController {
                         return "logout-form";
 
                     }else{
-                        model.addAttribute("incorrectUserName", true);
-                        return "settings";
+                        model.addAttribute("error", true);
+                        return getSettings(model);
                     }
                 } catch (CredentialException e) {
                     model.addAttribute("incorrectData", true);
-                    return "settings";
+                    return getSettings(model);
+                } catch (LoginException e) {
+                    model.addAttribute("incorrectUserName", true);
+                    return getSettings(model);
                 }
             }
 
@@ -99,7 +104,7 @@ public class SettingsController {
         {
             model.addAttribute("error", true);//zalogowano na inne konto lub zmieniono username w ukrytym input
         }
-
+        model.addAttribute("successfulEditUser", true);
         model.addAttribute("username", user.getUsername());
         model.addAttribute("userId", user.getId());
         return "settings";

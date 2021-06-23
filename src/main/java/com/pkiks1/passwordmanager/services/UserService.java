@@ -7,6 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.CredentialException;
+import javax.security.auth.login.CredentialNotFoundException;
+import javax.security.auth.login.LoginException;
 import java.util.Optional;
 
 @Service
@@ -50,62 +52,69 @@ public class UserService {
         }
         return false;
     }
-    public boolean updateUserWithoutPassword (String id, String login, char[] password){
+    public boolean updateUserWithoutPassword (String id, String login, char[] password) throws CredentialException{
         Optional<UserEntity> userEntityOptional;
         userEntityOptional = userRepository.findById(id);
         Optional<UserEntity> userEntityOptionalByLogin = userRepository.findUserEntityByLogin(login);
-        if (userEntityOptionalByLogin.isEmpty() && !userEntityOptional.get().getLogin().equals(login)) {
-            if(passwordEncoder.matches(String.valueOf(password),String.valueOf(userEntityOptional.get().getPassword()))){
+        if (passwordEncoder.matches(String.valueOf(password),String.valueOf(userEntityOptional.get().getPassword()))) {
+            if(userEntityOptionalByLogin.isEmpty() && !userEntityOptional.get().getLogin().equals(login)) {
                 UserEntity userEntity = userEntityOptional.get();
                 userEntity.setLogin(login);
                 userRepository.save(userEntity);
                 return true;
             }
+
+            return false;
         }
-        return false;
+
+        throw new CredentialException();
     }
 
     public boolean updateUserWithPassword (String id, String login, char[] oldPassword,
-                                           char[] firstPassword, char[] secondPassword) throws CredentialException {
+                                           char[] firstPassword, char[] secondPassword) throws LoginException {
 
         if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
                 || (login.length() < 4 || login.length() > 20)
                 || (firstPassword.length < 4 || firstPassword.length > 20)) {
-            throw new CredentialException("Incorrect data");
+            return false;
         }
         Optional<UserEntity> userEntityOptional;
         userEntityOptional = userRepository.findById(id);
         Optional<UserEntity> userEntityOptionalByLogin = userRepository.findUserEntityByLogin(login);
-        if (userEntityOptionalByLogin.isEmpty() && !userEntityOptional.get().getLogin().equals(login)) {
-            if(passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))){
+        if (passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))) {
+            if(userEntityOptionalByLogin.isEmpty() && !userEntityOptional.get().getLogin().equals(login)){
                 UserEntity userEntity = userEntityOptional.get();
                 userEntity.setLogin(login);
                 userEntity.setPassword(passwordEncoder.encode(new String(firstPassword)).toCharArray());
                 userRepository.save(userEntity);
                 return true;
             }
+            throw new LoginException();
         }
 
-        return false;
+        throw new CredentialException();
     }
     public boolean updateUserPassword (String id, String login,  char[] oldPassword,
                                            char[] firstPassword, char[] secondPassword) throws CredentialException {
 
         if (!String.valueOf(firstPassword).equals(String.valueOf(secondPassword))
                 || (firstPassword.length < 4 || firstPassword.length > 20)) {
-            throw new CredentialException("Incorrect data");
+            return false;
         }
         Optional<UserEntity> userEntityOptional;
         userEntityOptional = userRepository.findById(id);
-        if (userEntityOptional.get().getLogin().equals(login)){
-            if(passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))){
+        if (passwordEncoder.matches(String.valueOf(oldPassword),String.valueOf(userEntityOptional.get().getPassword()))){
+            if(userEntityOptional.get().getLogin().equals(login)){
                 UserEntity userEntity = userEntityOptional.get();
                 userEntity.setPassword(passwordEncoder.encode(new String(firstPassword)).toCharArray());
                 userRepository.save(userEntity);
                 return true;
             }
+
+            return false;
         }
-        return false;
+        throw new CredentialException();
+
     }
 
 }

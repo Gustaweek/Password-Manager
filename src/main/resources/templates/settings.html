@@ -61,15 +61,15 @@
                 <i class="material-icons prefix">vpn_key</i>
                 <input id="newPassword" class="validate" type="password" name="newPassword" minlength="4" maxlength="20" autocomplete="new-password">
                 <label for="newPassword">Nowe hasło</label>
-                <!--<span id="newPasswordHelper" class="helper-text"></span>
-                todo: fronted password validator
-                -->
+                <span id="newPasswordHelper" class="helper-text"></span>
+<!--                todo: fronted password validator-->
+
               </div>
               <div class="input-field">
                 <i class="material-icons prefix">subdirectory_arrow_right</i>
                 <input id="newPasswordSecond" class="validate" type="password" name="newPasswordSecond" minlength="4" maxlength="20" autocomplete="new-password">
                 <label for="newPasswordSecond">Powtórz nowe hasło</label>
-                <!--<span id="newPasswordSecondHelper" class="helper-text"></span>-->
+                <span id="newPasswordSecondHelper" class="helper-text"></span>
               </div>
 
             </div>
@@ -90,9 +90,12 @@
       <script th:if="${error == true}">
           M.toast({html: 'Wystąpił błąd', classes: 'red white-text'})
       </script>
+      <script th:if="${successfulEditUser == true}">
+        M.toast({html: 'Pomyślnie zaktualizowano użytkownika', classes: 'green white-text'})
+      </script>
     </div>
   </div>
 </div>
-<script th:src="@{/scripts/register.js}"></script>
+<script th:src="@{/scripts/settings-check-passwords.js}"></script>
 </body>
 </html>

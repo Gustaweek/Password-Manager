@@ -1,5 +1,6 @@
 package com.pkiks1.passwordmanager.services;
 
+import com.fasterxml.classmate.TypeBindings;
 import com.pkiks1.passwordmanager.domain.CredentialEntity;
 import com.pkiks1.passwordmanager.domain.UserEntity;
 import com.pkiks1.passwordmanager.dto.CredentialDto;
@@ -143,6 +144,47 @@ class CredentialServiceTest {
 
     }
 
+
+    @Test
+    void updateCredentialDoesNotExist() {
+        // given
+        String userName = "testLogin";
+        char[] userPassword = "testofpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, userPassword));
+        String title ="testTitle";
+        String email = "test@test.pl";
+        char[] credentialPassword = "testofpassword".toCharArray();
+
+        CredentialEntity credentialEntity = new CredentialEntity(title,email,credentialPassword,userEntity.get());
+
+        String userId = userEntity.get().getId();
+        String newTitle ="newTestTitle";
+        String newEmail = "newTest@test.pl";
+        char[] newCredentialPassword = "NewTestOfPassword".toCharArray();
+        String encrypted = "testEncrypted";
+
+        CredentialDto updatedCredentialDto = new CredentialDto.CredentialDtoBuilder()
+                .withId(credentialEntity.getId())
+                .withUserId(userId)
+                .withTitle(newTitle)
+                .withEmail(newEmail)
+                .withPassword(newCredentialPassword)
+                .build();
+        Optional<CredentialEntity> credentialEntityOptional = Optional.empty();
+
+        // when
+        when(credentialRepository.findById(anyString())).thenReturn(credentialEntityOptional);
+
+        // then
+        try {
+            credentialService.updateCredential(updatedCredentialDto);
+        } catch (Exception e) {
+            fail("Unexpected exception");
+        }
+        assertTrue( credentialEntityOptional.isEmpty());
+
+    }
+
     @Test
     void getAllCredentialsForUserIdHappyPath() {
         // given
@@ -170,7 +212,23 @@ class CredentialServiceTest {
         credentialDtos = credentialService.getAllCredentialsForUserId(userId);
         assertEquals(1,credentialDtos.size());
     }
+    @Test
+    void getAllCredentialsForUserIdNoCredentialsFound() {
+        // given
+        String userName = "testLogin";
+        char[] userPassword = "testofpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, userPassword));
+        String userId = userEntity.get().getId();
 
+        //when
+        when(userRepository.findById(anyString())).thenReturn(userEntity);
+        when(credentialRepository.findCredentialEntitiesByUser(any(UserEntity.class))).thenReturn(Collections.emptyList());
+
+        //then
+        List<CredentialDto> credentialDtos ;
+        credentialDtos = credentialService.getAllCredentialsForUserId(userId);
+        assertEquals(0,credentialDtos.size());
+    }
     @Test
     void getCredentialForUserHappyPath() {
         // given
@@ -211,6 +269,40 @@ class CredentialServiceTest {
         assertEquals(credentialDtoOptional.get().getTitle(),credentialDto.getTitle());
     }
 
+    @Test
+    void getCredentialForUserNoCredentialFound() {
+        // given
+        String userName = "testLogin";
+        char[] userPassword = "testofpassword".toCharArray();
+        Optional<UserEntity> userEntity = Optional.of(new UserEntity(userName, userPassword));
+        String userId = userEntity.get().getId();
+        String title ="testTitle";
+        String email = "test@test.pl";
+        char[] credentialPasswordEncode = "dGVzdG9mcGFzc3dvcmQ=".toCharArray();
+        char[] credentialPassword = "testofpassword".toCharArray();
+        Optional<CredentialEntity> credentialEntityOptional = Optional.empty();//Optional.of(new CredentialEntity(title, email, credentialPasswordEncode, userEntity.get()));
+
+        CredentialDto credentialDto = new CredentialDto.CredentialDtoBuilder()
+                .withId("test")
+                .withUserId(userId)
+                .withTitle(title)
+                .withEmail(email)
+                .withPassword(credentialPasswordEncode)
+                .build();
+        Optional<CredentialDto> credentialDtoOptional = Optional.of(credentialDto);
+
+        //when
+        when(credentialRepository.findById(anyString())).thenReturn(credentialEntityOptional);
+
+        //then
+        try {
+            credentialDtoOptional = credentialService.getCredentialForUser(credentialDto);
+        } catch (Exception e) {
+            fail("Unexpected exception");
+        }
+        assertTrue(credentialDtoOptional.isEmpty());
+
+    }
     @Test
     void deleteCredentialHappyPath() {
         // given

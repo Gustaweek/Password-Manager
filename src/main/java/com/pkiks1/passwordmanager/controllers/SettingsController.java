@@ -53,6 +53,7 @@ public class SettingsController {
         if(userId.equals(user.getId()))
         {
             if (!changePassword) {
+
                 try {
                     boolean updateComplete = userService.updateUserWithoutPassword(user.getId(), username, firstPassword);
                     if (updateComplete) {

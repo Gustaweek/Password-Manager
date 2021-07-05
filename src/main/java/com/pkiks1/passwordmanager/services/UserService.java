@@ -52,6 +52,7 @@ public class UserService {
         }
         return false;
     }
+
     public boolean updateUserWithoutPassword (String id, String login, char[] password) throws CredentialException{
         Optional<UserEntity> userEntityOptional;
         userEntityOptional = userRepository.findById(id);
@@ -114,7 +115,6 @@ public class UserService {
             return false;
         }
         throw new CredentialException();
-
     }
 
 }
